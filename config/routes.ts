@@ -1,3 +1,5 @@
+import { layout } from "@/app";
+
 export default [
   {
     path: '/user',
@@ -75,6 +77,7 @@ export default [
             icon: 'smile',
             path: '/searchModule/search/users',
             component: './User/Search/users',
+            // layout: false 
           },
           {
             name: '图片检索',
@@ -92,9 +95,6 @@ export default [
       },
     ],
   },
-
-
-
 
   {
     path: '/list',

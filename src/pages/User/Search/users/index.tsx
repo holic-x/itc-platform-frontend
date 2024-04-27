@@ -1,10 +1,6 @@
-import { useModel } from '@umijs/max';
-import React, { useState } from 'react';
+import React from 'react';
 
 const Users: React.FC = () => {
-  const [type, setType] = useState<string>('account');
-  const { setInitialState } = useModel('@@initialState');
-
 
   return (
 
