@@ -41,6 +41,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageFetchPostVO_ = {
+    code?: number;
+    data?: PageFetchPostVO_;
+    message?: string;
+  };
+
   type BaseResponsePagePost_ = {
     code?: number;
     data?: PagePost_;
@@ -80,6 +86,12 @@ declare namespace API {
   type BaseResponsePostVO_ = {
     code?: number;
     data?: PostVO;
+    message?: string;
+  };
+
+  type BaseResponseSearchVO_ = {
+    code?: number;
+    data?: SearchVO;
     message?: string;
   };
 
@@ -184,6 +196,41 @@ declare namespace API {
     id?: number;
   };
 
+  type FetchPostQueryRequest = {
+    content?: string;
+    current?: number;
+    favourUserId?: number;
+    id?: number;
+    notId?: number;
+    orTags?: string[];
+    pageSize?: number;
+    searchText?: string;
+    sortField?: string;
+    sortOrder?: string;
+    status?: number;
+    tags?: string[];
+    title?: string;
+    userId?: number;
+  };
+
+  type FetchPostVO = {
+    category?: string;
+    commentNum?: number;
+    content?: string;
+    createTime?: string;
+    favourNum?: number;
+    id?: number;
+    status?: number;
+    tagList?: string[];
+    thumbNum?: number;
+    title?: string;
+    updateTime?: string;
+    userId?: string;
+    userInfo?: string;
+    userName?: string;
+    viewNum?: number;
+  };
+
   type getDataInfoVOByIdUsingGETParams = {
     /** id */
     id?: number;
@@ -245,6 +292,19 @@ declare namespace API {
     orders?: OrderItem[];
     pages?: number;
     records?: DataInfoVO[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
+  type PageFetchPostVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: FetchPostVO[];
     searchCount?: boolean;
     size?: number;
     total?: number;
@@ -326,6 +386,11 @@ declare namespace API {
     searchCount?: boolean;
     size?: number;
     total?: number;
+  };
+
+  type Picture = {
+    title?: string;
+    url?: string;
   };
 
   type Post = {
@@ -415,6 +480,22 @@ declare namespace API {
     updateTime?: string;
     user?: UserVO;
     userId?: number;
+  };
+
+  type SearchRequest = {
+    current?: number;
+    pageSize?: number;
+    searchText?: string;
+    searchType?: string;
+    sortField?: string;
+    sortOrder?: string;
+  };
+
+  type SearchVO = {
+    dataList?: Record<string, any>[];
+    pictureList?: Picture[];
+    postList?: PostVO[];
+    userList?: UserVO[];
   };
 
   type Template = {

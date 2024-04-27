@@ -13,12 +13,12 @@ const tabList = [
     tab: '文章',
   },
   {
-    key: 'pictures',
-    tab: '图片',
+    key: 'projects',
+    tab: '项目',
   },
   {
-    key: 'users',
-    tab: '用户',
+    key: 'applications',
+    tab: '应用',
   },
 ];
 
@@ -32,11 +32,11 @@ const Search: FC<SearchProps> = () => {
       case 'articles':
         history.push(`${url}/articles`);
         break;
-      case 'pictures':
-        history.push(`${url}/pictures`);
+      case 'applications':
+        history.push(`${url}/applications`);
         break;
-      case 'users':
-        history.push(`${url}/users`);
+      case 'projects':
+        history.push(`${url}/projects`);
         break;
       default:
         break;

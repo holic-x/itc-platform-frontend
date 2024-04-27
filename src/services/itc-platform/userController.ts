@@ -112,8 +112,8 @@ export async function listUserByPageUsingPost(
   });
 }
 
-/** listUserVOByPage POST /api/user/list/page/vo */
-export async function listUserVoByPageUsingPost(
+/** getUserVOByPage POST /api/user/list/page/vo */
+export async function getUserVoByPageUsingPost(
   body: API.UserQueryRequest,
   options?: { [key: string]: any },
 ) {

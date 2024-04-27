@@ -2,12 +2,12 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** addDataInfo POST /api/dataInfo/add */
+/** addDataInfo POST /api/admin/dataInfo/add */
 export async function addDataInfoUsingPost(
   body: API.DataInfoAddRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseLong_>('/api/dataInfo/add', {
+  return request<API.BaseResponseLong_>('/api/admin/dataInfo/add', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -17,12 +17,12 @@ export async function addDataInfoUsingPost(
   });
 }
 
-/** batchDeleteDataInfo POST /api/dataInfo/batchDeleteDataInfo */
+/** batchDeleteDataInfo POST /api/admin/dataInfo/batchDeleteDataInfo */
 export async function batchDeleteDataInfoUsingPost(
   body: API.BatchDeleteRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean_>('/api/dataInfo/batchDeleteDataInfo', {
+  return request<API.BaseResponseBoolean_>('/api/admin/dataInfo/batchDeleteDataInfo', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -32,12 +32,12 @@ export async function batchDeleteDataInfoUsingPost(
   });
 }
 
-/** deleteDataInfo POST /api/dataInfo/delete */
+/** deleteDataInfo POST /api/admin/dataInfo/delete */
 export async function deleteDataInfoUsingPost(
   body: API.DeleteRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean_>('/api/dataInfo/delete', {
+  return request<API.BaseResponseBoolean_>('/api/admin/dataInfo/delete', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -47,13 +47,13 @@ export async function deleteDataInfoUsingPost(
   });
 }
 
-/** getDataInfoVOById GET /api/dataInfo/get/vo */
+/** getDataInfoVOById GET /api/admin/dataInfo/get/vo */
 export async function getDataInfoVoByIdUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getDataInfoVOByIdUsingGETParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseDataInfoVO_>('/api/dataInfo/get/vo', {
+  return request<API.BaseResponseDataInfoVO_>('/api/admin/dataInfo/get/vo', {
     method: 'GET',
     params: {
       ...params,
@@ -62,12 +62,12 @@ export async function getDataInfoVoByIdUsingGet(
   });
 }
 
-/** handleDataInfoStatus POST /api/dataInfo/handleDataInfoStatus */
+/** handleDataInfoStatus POST /api/admin/dataInfo/handleDataInfoStatus */
 export async function handleDataInfoStatusUsingPost(
   body: API.DataInfoStatusUpdateRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean_>('/api/dataInfo/handleDataInfoStatus', {
+  return request<API.BaseResponseBoolean_>('/api/admin/dataInfo/handleDataInfoStatus', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -77,12 +77,12 @@ export async function handleDataInfoStatusUsingPost(
   });
 }
 
-/** listDataInfoByPage POST /api/dataInfo/list/page */
+/** listDataInfoByPage POST /api/admin/dataInfo/list/page */
 export async function listDataInfoByPageUsingPost(
   body: API.DataInfoQueryRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePageDataInfo_>('/api/dataInfo/list/page', {
+  return request<API.BaseResponsePageDataInfo_>('/api/admin/dataInfo/list/page', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -92,12 +92,12 @@ export async function listDataInfoByPageUsingPost(
   });
 }
 
-/** listDataInfoVOByPage POST /api/dataInfo/list/page/vo */
+/** listDataInfoVOByPage POST /api/admin/dataInfo/list/page/vo */
 export async function listDataInfoVoByPageUsingPost(
   body: API.DataInfoQueryRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePageDataInfoVO_>('/api/dataInfo/list/page/vo', {
+  return request<API.BaseResponsePageDataInfoVO_>('/api/admin/dataInfo/list/page/vo', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -107,12 +107,12 @@ export async function listDataInfoVoByPageUsingPost(
   });
 }
 
-/** listByPage POST /api/dataInfo/listByPage */
+/** listByPage POST /api/admin/dataInfo/listByPage */
 export async function listByPageUsingPost(
   body: API.DataInfoQueryRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePageDataInfoVO_>('/api/dataInfo/listByPage', {
+  return request<API.BaseResponsePageDataInfoVO_>('/api/admin/dataInfo/listByPage', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -122,12 +122,12 @@ export async function listByPageUsingPost(
   });
 }
 
-/** updateDataInfo POST /api/dataInfo/update */
+/** updateDataInfo POST /api/admin/dataInfo/update */
 export async function updateDataInfoUsingPost(
   body: API.DataInfoUpdateRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean_>('/api/dataInfo/update', {
+  return request<API.BaseResponseBoolean_>('/api/admin/dataInfo/update', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

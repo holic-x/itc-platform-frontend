@@ -11,7 +11,7 @@ import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 
 // 引入用户信息管理相关API
-import { addUserUsingPost, batchDeleteUserUsingPost, deleteUserUsingPost, handleUserStatusUsingPost, listUserVoByPageUsingPost, updateUserUsingPost } from '@/services/itc-platform/userController';
+import { addUserUsingPost, batchDeleteUserUsingPost, deleteUserUsingPost, handleUserStatusUsingPost, listUserByPageUsingPost, updateUserUsingPost } from '@/services/itc-platform/userController';
 
 // 接入自定义模态框或组件（新增、修改）
 import CreateModal from './components/CreateModal';
@@ -356,7 +356,7 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
 
         // 根据request规则，重新编写请求和响应处理
         request={async (params, sort: Record<string, SortOrder>, filter: Record<string, React.ReactText[] | null>) => {
-          const res = await listUserVoByPageUsingPost({
+          const res = await listUserByPageUsingPost({
             ...params
           })
           if (res?.data) {

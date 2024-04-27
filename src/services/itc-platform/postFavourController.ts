@@ -2,12 +2,12 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** doPostFavour POST /api/post_favour/ */
+/** doPostFavour POST /api/admin/post_favour/ */
 export async function doPostFavourUsingPost(
   body: API.PostFavourAddRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseInt_>('/api/post_favour/', {
+  return request<API.BaseResponseInt_>('/api/admin/post_favour/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -17,12 +17,12 @@ export async function doPostFavourUsingPost(
   });
 }
 
-/** listFavourPostByPage POST /api/post_favour/list/page */
+/** listFavourPostByPage POST /api/admin/post_favour/list/page */
 export async function listFavourPostByPageUsingPost(
   body: API.PostFavourQueryRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePagePostVO_>('/api/post_favour/list/page', {
+  return request<API.BaseResponsePagePostVO_>('/api/admin/post_favour/list/page', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -32,12 +32,12 @@ export async function listFavourPostByPageUsingPost(
   });
 }
 
-/** listMyFavourPostByPage POST /api/post_favour/my/list/page */
+/** listMyFavourPostByPage POST /api/admin/post_favour/my/list/page */
 export async function listMyFavourPostByPageUsingPost(
   body: API.PostQueryRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePagePostVO_>('/api/post_favour/my/list/page', {
+  return request<API.BaseResponsePagePostVO_>('/api/admin/post_favour/my/list/page', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
