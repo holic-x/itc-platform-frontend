@@ -18,7 +18,7 @@ const tabList = [
   },
   {
     key: 'interfaces',
-    tab: '接口调用API',
+    tab: 'API广场',
   },
   {
     key: 'users',
@@ -38,6 +38,9 @@ const Search: FC<SearchProps> = () => {
         break;
       case 'pictures':
         history.push(`${url}/pictures`);
+        break;
+      case 'interfaces':
+        history.push(`${url}/interfaces`);
         break;
       case 'users':
         history.push(`${url}/users`);
