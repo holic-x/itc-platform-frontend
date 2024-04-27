@@ -4,9 +4,10 @@ export default [
     layout: false,
     routes: [
       {name: '登录', path: '/user/login', component: './User/Login'},
-      {name: '注册', path: '/user/register', component: './User/Register'}
+      {name: '注册', path: '/user/register', component: './User/Register'},
     ],
   },
+
   {path: '/welcome', name: '欢迎', icon: 'smile', component: './Welcome'},
 
   // 管理员访问权限控制
@@ -42,4 +43,19 @@ export default [
   {name: '查询表格', icon: 'table', path: '/list', component: './TableList'},
   {path: '/', redirect: '/welcome'},
   {path: '*', layout: false, component: './404'},
+
+
+  {name: '搜索模块', icon: 'table', path: '/user/search', component: './User/Search'},
+
+
+
+  // 搜索模块定义(权限控制)
+  {
+    path: '/search',
+    routes: [
+      {name: '聚合搜索',  path: '/search',component: './User/Search'},
+    ],
+  },
+
+
 ];
