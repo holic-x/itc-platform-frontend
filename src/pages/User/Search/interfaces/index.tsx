@@ -1,10 +1,10 @@
+import { listUserByPageUsingPost } from '@/services/itc-platform/userController';
 import {
   DownloadOutlined,
   EditOutlined,
   EllipsisOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
-import { useRequest } from '@umijs/max';
 import { Avatar, Card, Col, Dropdown, Form, List, Row, Select, Tooltip } from 'antd';
 import numeral from 'numeral';
 import type { FC } from 'react';
@@ -13,9 +13,8 @@ import { categoryOptions } from '../../../Mod/mock';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
 import type { ListItemDataType } from './data.d';
-import { queryFakeList } from './service';
 import useStyles from './style.style';
-import { getLoginUserUsingGet } from '@/services/itc-platform/userController';
+import { listInterfaceInfoStatisticsByPageUsingPost } from '@/services/itc-platform/apiSquareController';
 export function formatWan(val: number) {
   const v = val * 1;
   if (!v || Number.isNaN(v)) return '';
@@ -50,43 +49,52 @@ const formItemLayout = {
     },
   },
 };
+
+// 封装卡片组件
 const CardInfo: React.FC<{
-  activeUser: React.ReactNode;
-  newUser: React.ReactNode;
-}> = ({ activeUser, newUser }) => {
+  callTotal: React.ReactNode;
+  callSuccessNum: React.ReactNode;
+}> = ({ callTotal, callSuccessNum }) => {
   const { styles } = useStyles();
   return (
     <div className={styles.cardInfo}>
       <div>
-        <p>活跃用户</p>
-        <p>{activeUser}</p>
+        <p>调用总次数</p>
+        <p>{callTotal}</p>
       </div>
       <div>
-        <p>新增用户</p>
-        <p>{newUser}</p>
+        <p>成功总次数</p>
+        <p>{callSuccessNum}</p>
       </div>
     </div>
   );
 };
+
+// 请求接口获取接口信息
+const fetchResData = async () => {
+  try {
+    const res = await listInterfaceInfoStatisticsByPageUsingPost({
+      "interfaceName": "",
+      "interfaceStatus": "",
+      "interfaceType": "",
+      "userName": ""
+    });
+    return res.data;
+  } catch (error) {
+    // 提示异常信息
+    alert('信息请求异常');
+  }
+  return undefined;
+};
+// 调用方法获取响应处理后的数据
+const resData = await fetchResData();
+
 export const Applications: FC<Record<string, any>> = () => {
   const { styles } = useStyles();
 
-  const { data, loading, run } = useRequest((values: any) => {
-    console.log('form data', values);
-    return async()=>{
-      await getLoginUserUsingGet();
-    }
-    
-    /*
-    queryFakeList({
-      count: 8,
-    });
-    */
-  });
-
-
-  const list = data?.list || [];
-
+  // 分页处理
+  // const list = resData?.records || [];
+  const list =  resData ;
 
   return (
     <div className={styles.filterCardList}>
@@ -169,10 +177,10 @@ export const Applications: FC<Record<string, any>> = () => {
           xl: 4,
           xxl: 4,
         }}
-        loading={loading}
+        // loading={loading}
         dataSource={list}
         renderItem={(item) => (
-          <List.Item key={item.id}>
+          <List.Item key={item.interfaceInfoId}>
             <Card
               hoverable
               bodyStyle={{
@@ -207,11 +215,11 @@ export const Applications: FC<Record<string, any>> = () => {
                 </Dropdown>,
               ]}
             >
-              <Card.Meta avatar={<Avatar size="small" src={item.avatar} />} title={item.title} />
+              <Card.Meta avatar={<Avatar size="small" src={item.avatar} />} title={item.interfaceInfoName} />
               <div>
                 <CardInfo
-                  activeUser={formatWan(item.activeUser)}
-                  newUser={numeral(item.newUser).format('0,0')}
+                  callTotal={formatWan(item.callTotal)}
+                  callSuccessNum={numeral(item.callSuccessNum).format('0,0')}
                 />
               </div>
             </Card>
