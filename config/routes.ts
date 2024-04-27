@@ -91,6 +91,12 @@ export default [
             path: '/searchModule/search/articles',
             component: './User/Search/articles',
           },
+          {
+            name: '接口检索',
+            icon: 'smile',
+            path: '/searchModule/search/interfaces',
+            component: './User/Search/interfaces',
+          },
         ],
       },
     ],

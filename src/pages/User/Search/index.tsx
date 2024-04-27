@@ -17,6 +17,10 @@ const tabList = [
     tab: '图片',
   },
   {
+    key: 'interfaces',
+    tab: '接口调用API',
+  },
+  {
     key: 'users',
     tab: '用户',
   },
