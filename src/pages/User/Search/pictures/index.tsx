@@ -1,6 +1,6 @@
-import { searchAllByCondAdaptorUsingPost } from '@/services/itc-platform/searchOptimizeController';
-import { Card, List } from 'antd';
-import React from 'react';
+import {searchAllByCondAdaptorUsingPost} from '@/services/itc-platform/searchOptimizeController';
+import {Card, List} from 'antd';
+import React, { useEffect,useState } from 'react';
 
 const params = {
   searchText: '小黑子',
@@ -8,23 +8,39 @@ const params = {
 };
 console.log(params);
 
-// 请求接口获取图片信息
-const fetchResData = async () => {
-  try {
-    const res = await searchAllByCondAdaptorUsingPost({
-      ...params,
-    });
-    return res.data;
-  } catch (error) {
-    // 提示异常信息
-    alert('图片信息请求异常');
-  }
-  return undefined;
-};
-// 调用方法获取响应处理后的数据
-const resData = await fetchResData();
 
 const Index: React.FC = () => {
+
+
+  // 请求接口获取图片信息
+  /*
+  const fetchResData = async () => {
+    try {
+      const res = await searchAllByCondAdaptorUsingPost({
+        ...params,
+      });
+      return res.data;
+    } catch (error) {
+      // 提示异常信息
+      alert('图片信息请求异常');
+    }
+    return undefined;
+  };
+  const resData = fetchResData();
+  */
+
+  const [resData,setResData]  = useState();
+
+  // 调用方法获取响应处理后的数据
+  useEffect(()=>{
+    searchAllByCondAdaptorUsingPost({
+      ...params,
+    }).then(res=>{
+      setResData(res.data);
+      console.error('res',res)
+    });
+  },[])
+
   return (
     // 页面信息定义（search）
     <div className="search">
@@ -53,4 +69,5 @@ const Index: React.FC = () => {
     </div>
   );
 };
+
 export default Index;

@@ -77,7 +77,7 @@ export default [
             icon: 'smile',
             path: '/searchModule/search/users',
             component: './User/Search/users',
-            // layout: false 
+            // layout: false
           },
           {
             name: '图片检索',
@@ -101,7 +101,7 @@ export default [
       },
     ],
   },
-
+/*
   {
     path: '/list',
     icon: 'table',
@@ -140,7 +140,7 @@ export default [
   },
 
 
-
+*/
 
 
 ];

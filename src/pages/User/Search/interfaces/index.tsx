@@ -1,4 +1,3 @@
-import { listUserByPageUsingPost } from '@/services/itc-platform/userController';
 import {
   DownloadOutlined,
   EditOutlined,
@@ -9,7 +8,7 @@ import { Avatar, Card, Col, Dropdown, Form, List, Row, Select, Tooltip } from 'a
 import numeral from 'numeral';
 import type { FC } from 'react';
 import React from 'react';
-import { categoryOptions } from '../../../Mod/mock';
+// import { categoryOptions } from '../../../Mod/mock';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
 import type { ListItemDataType } from './data.d';
@@ -112,13 +111,15 @@ export const Applications: FC<Record<string, any>> = () => {
             }}
           >
             <Form.Item name="category">
-              <TagSelect expandable>
-                {categoryOptions.map((category) => (
-                  <TagSelect.Option value={category.value!} key={category.value}>
-                    {category.label}
-                  </TagSelect.Option>
-                ))}
-              </TagSelect>
+
+              {/*<TagSelect expandable>*/}
+              {/*  {categoryOptions.map((category) => (*/}
+              {/*    <TagSelect.Option value={category.value!} key={category.value}>*/}
+              {/*      {category.label}*/}
+              {/*    </TagSelect.Option>*/}
+              {/*  ))}*/}
+              {/*</TagSelect>*/}
+
             </Form.Item>
           </StandardFormRow>
           <StandardFormRow title="其它选项" grid last>
