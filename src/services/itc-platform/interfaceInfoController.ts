@@ -47,6 +47,21 @@ export async function getInterfaceInfoVoByIdUsingGet(
   });
 }
 
+/** invokeInterfaceInfo POST /api/admin/interfaceInfo/invoke */
+export async function invokeInterfaceInfoUsingPost(
+  body: API.InterfaceInfoInvokeRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseObject_>('/api/admin/interfaceInfo/invoke', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** listOnlineInterfaceInfoByPage POST /api/admin/interfaceInfo/list/listOnlineInterfaceInfo */
 export async function listOnlineInterfaceInfoByPageUsingPost(
   body: API.InterfaceInfoQueryRequest,
@@ -101,6 +116,36 @@ export async function listMyInterfaceInfoVoByPageUsingPost(
   options?: { [key: string]: any },
 ) {
   return request<API.BaseResponsePageInterfaceInfo_>('/api/admin/interfaceInfo/my/list/page/vo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** offlineInterfaceInfo POST /api/admin/interfaceInfo/offline */
+export async function offlineInterfaceInfoUsingPost(
+  body: API.IdRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseBoolean_>('/api/admin/interfaceInfo/offline', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** onlineInterfaceInfo POST /api/admin/interfaceInfo/online */
+export async function onlineInterfaceInfoUsingPost(
+  body: API.IdRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseBoolean_>('/api/admin/interfaceInfo/online', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

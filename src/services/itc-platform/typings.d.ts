@@ -47,6 +47,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseObject_ = {
+    code?: number;
+    data?: Record<string, any>;
+    message?: string;
+  };
+
   type BaseResponsePageDataInfo_ = {
     code?: number;
     data?: PageDataInfo_;
@@ -307,6 +313,10 @@ declare namespace API {
     id?: number;
   };
 
+  type IdRequest = {
+    id?: number;
+  };
+
   type InterfaceInfo = {
     avatar?: string;
     createTime?: string;
@@ -335,6 +345,11 @@ declare namespace API {
     requestParams?: string;
     responseHeader?: string;
     url?: string;
+  };
+
+  type InterfaceInfoInvokeRequest = {
+    id?: number;
+    userRequestParams?: string;
   };
 
   type InterfaceInfoQueryRequest = {
