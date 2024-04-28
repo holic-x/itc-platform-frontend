@@ -10,6 +10,16 @@ export default [
     ],
   },
 
+  // 账号信息相关
+  {
+    path: '/account',
+    // layout: false, // 设置为false不引用任何样式，如果为true会自动嵌入导航栏，如果想自定义页面样式可以通过配置这个参数进行控制
+    routes: [
+      {name: '个人中心', path: '/account/center', component: './Account/Center'},
+      {name: '个人设置', path: '/account/settings', component: './Account/Settings'},
+    ],
+  },
+
   {path: '/welcome', name: '欢迎', icon: 'smile', component: './Welcome'},
 
   // 管理员访问权限控制
