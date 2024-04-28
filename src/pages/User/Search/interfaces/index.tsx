@@ -7,13 +7,14 @@ import {
 import { Avatar, Card, Col, Dropdown, Form, List, Row, Select, Tooltip } from 'antd';
 import numeral from 'numeral';
 import type { FC } from 'react';
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 // import { categoryOptions } from '../../../Mod/mock';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
 import type { ListItemDataType } from './data.d';
 import useStyles from './style.style';
 import { listInterfaceInfoStatisticsByPageUsingPost } from '@/services/itc-platform/apiSquareController';
+import {searchAllByCondAdaptorUsingPost} from "@/services/itc-platform/searchOptimizeController";
 export function formatWan(val: number) {
   const v = val * 1;
   if (!v || Number.isNaN(v)) return '';
@@ -69,27 +70,48 @@ const CardInfo: React.FC<{
   );
 };
 
-// 请求接口获取接口信息
-const fetchResData = async () => {
-  try {
-    const res = await listInterfaceInfoStatisticsByPageUsingPost({
+
+
+export const Applications: FC<Record<string, any>> = () => {
+  const { styles } = useStyles();
+
+  // 定义全局响应参数
+  const [resData,setResData]  = useState();
+
+  // 请求接口获取接口信息
+  const fetchResData = async () => {
+    try {
+      const res = await listInterfaceInfoStatisticsByPageUsingPost({
+        "interfaceName": "",
+        "interfaceStatus": "",
+        "interfaceType": "",
+        "userName": ""
+      });
+
+      console.log('获取接口信息列表：'+JSON.stringify(res));
+      setResData(res.data);
+      return res.data;
+    } catch (error) {
+      // 提示异常信息
+      alert('信息请求异常');
+    }
+    return undefined;
+  };
+
+  // 调用方法获取响应处理后的数据
+  useEffect(()=>{
+    listInterfaceInfoStatisticsByPageUsingPost({
       "interfaceName": "",
       "interfaceStatus": "",
       "interfaceType": "",
       "userName": ""
+    }).then(res=>{
+      setResData(res.data);
+      console.error('res',res)
     });
-    return res.data;
-  } catch (error) {
-    // 提示异常信息
-    alert('信息请求异常');
-  }
-  return undefined;
-};
-// 调用方法获取响应处理后的数据
-const resData = await fetchResData();
+  },[])
 
-export const Applications: FC<Record<string, any>> = () => {
-  const { styles } = useStyles();
+
 
   // 分页处理
   // const list = resData?.records || [];
@@ -100,7 +122,7 @@ export const Applications: FC<Record<string, any>> = () => {
       <Card bordered={false}>
         <Form
           onValuesChange={(_, values) => {
-            run(values);
+            fetchResData(values);
           }}
         >
           <StandardFormRow
@@ -167,7 +189,7 @@ export const Applications: FC<Record<string, any>> = () => {
         </Form>
       </Card>
       <br />
-      <List<ListItemDataType>
+      <List<API.InterfaceInfoStatisticVO>
         rowKey="id"
         grid={{
           gutter: 16,
@@ -216,7 +238,7 @@ export const Applications: FC<Record<string, any>> = () => {
                 </Dropdown>,
               ]}
             >
-              <Card.Meta avatar={<Avatar size="small" src={item.avatar} />} title={item.interfaceInfoName} />
+              <Card.Meta avatar={<Avatar size="small" src={item.interfaceInfoAvatar} />} title={item.interfaceInfoName} />
               <div>
                 <CardInfo
                   callTotal={formatWan(item.callTotal)}
