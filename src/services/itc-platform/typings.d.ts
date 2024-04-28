@@ -308,6 +308,7 @@ declare namespace API {
   };
 
   type InterfaceInfo = {
+    avatar?: string;
     createTime?: string;
     description?: string;
     id?: number;
@@ -368,8 +369,9 @@ declare namespace API {
     callSuccessNum?: string;
     callTotal?: string;
     errStatusNum?: string;
-    interfaceId?: string;
-    interfaceName?: string;
+    interfaceInfoAvatar?: string;
+    interfaceInfoId?: string;
+    interfaceInfoName?: string;
   };
 
   type InterfaceInfoUpdateRequest = {
@@ -415,10 +417,12 @@ declare namespace API {
   };
 
   type LoginUserVO = {
+    address?: string;
     createTime?: string;
     id?: number;
     updateTime?: string;
     userAvatar?: string;
+    userDescr?: string;
     userName?: string;
     userProfile?: string;
     userRole?: string;
@@ -739,6 +743,7 @@ declare namespace API {
   };
 
   type User = {
+    address?: string;
     createTime?: string;
     id?: number;
     isDelete?: number;
@@ -747,6 +752,7 @@ declare namespace API {
     updateTime?: string;
     userAccount?: string;
     userAvatar?: string;
+    userDescr?: string;
     userName?: string;
     userPassword?: string;
     userProfile?: string;
@@ -840,8 +846,15 @@ declare namespace API {
   };
 
   type UserVO = {
+    accessKey?: string;
+    address?: string;
     createTime?: string;
+    grade?: string;
     id?: number;
+    isDevelop?: number;
+    registerChannel?: string;
+    score?: number;
+    secretKey?: string;
     updateTime?: string;
     userAccount?: string;
     userAvatar?: string;
