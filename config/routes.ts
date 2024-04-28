@@ -67,6 +67,7 @@ export default [
           // 当前路径配置转发规则
           {path: '/admin/api', redirect: '/admin/api/interfaceInfo'},
           {path: '/admin/api/interfaceInfo', name: '接口信息管理', component: './Admin/Api/InterfaceInfo'},
+          {path: '/admin/api/interfaceInfoStatistic', name: '接口数据统计', component: './Admin/Api/InterfaceInfoStatistic'},
         ],
       },
 
@@ -146,6 +147,27 @@ export default [
           },
         ],
       },
+    ],
+  },
+
+  // API模块
+  {
+    path: '/apiModule',
+    icon: 'table',
+    name: 'API广场',
+    routes: [
+      {
+        path: '/apiModule/api/myChart',
+        name: '🎰我的报表',
+        component: './User/Api/MyChart',
+      },
+
+      {
+        path: '/apiModule/api/onlineDebug',
+        name: '🎰在线调试',
+        component: './User/Api/OnlineDebug',
+      },
+
     ],
   },
 
