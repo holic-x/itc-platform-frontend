@@ -150,9 +150,10 @@ export default [
     name: 'API广场',
     routes: [
       {
-        path: '/apiModule/api/myChart',
-        name: '🎰我的报表',
-        component: './User/Api/MyChart',
+        // todo 用户的API接口管理和后台共用页面，通过用户角色和数据状态限定操作权限和数据访问范围（不单独开页面，避免重复代码编写）
+        path: '/apiModule/api/myApi',
+        name: '🎰我的接口',
+        component: './Admin/Api/InterfaceInfo',
       },
 
       {
