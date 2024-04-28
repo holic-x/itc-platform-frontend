@@ -13,6 +13,7 @@ import {getUserVoMoreByCurrentLoginUserUsingGet} from "@/services/itc-platform/u
 
 // 引入自定义组件（复制按钮）
 import CopyButton from "@/components/Common/CopyButton";
+import DownloadButton from "@/components/Common/DownloadButton";
 
 const Index: React.FC = () => {
 
@@ -26,13 +27,42 @@ const Index: React.FC = () => {
   // 用户详细信息
   const [userMoreInfo,setUserMoreInfo] = useState();
 
-  // 调用接口获取用户详情信息(空数组表示仅在组件挂载时调用一次)
-  useEffect(()=>{
+
+  // 定义方法获取用户信息
+  const fetchUserInfo = async () => {
     getUserVoMoreByCurrentLoginUserUsingGet().then(res=>{
       setUserMoreInfo(res.data);
       console.error('center响应数据',res)
     });
+  }
+
+  // 调用接口获取用户详情信息(空数组表示仅在组件挂载时调用一次)
+  useEffect(()=>{
+    // 调用方法触发用户信息获取
+    fetchUserInfo();
   },[])
+
+
+  // ---------------- start 操作方法定义 --------------
+  // 重新生成AK/SK
+  const handleRegenerate = () =>{
+      alert('模拟调用接口重新生成AK、SK');
+      // 响应成功，重新请求刷新页面数据
+      fetchUserInfo();
+  }
+
+  // 处理每日签到
+  const handleDailySignIn = () => {
+    alert('模拟调用接口进行每日签到领取积分');
+    alert('🚀🚀🚀签到成功，恭喜获取💰10积分，请再接再厉');
+    // 响应成功，重新请求刷新页面数据
+    fetchUserInfo();
+  }
+
+  // ---------------- end 操作方法定义 --------------
+
+
+
 
   // 自定义loading组件
   const loading = (
@@ -90,6 +120,8 @@ const Index: React.FC = () => {
   const renderDevelop = ({accessKey, secretKey, score}: Partial<API.UserVO>) => {
     return (
       <div className={styles.detail}>
+        <Button type="link" onClick={handleRegenerate}  >💊重新生成AK/SK💊</Button>
+        <Button type="link" onClick={handleDailySignIn}  >🚀每日签到领积分🚀</Button>
         <p>
           <ApiOutlined
             style={{
@@ -116,6 +148,39 @@ const Index: React.FC = () => {
             }}
           />
           用户积分：{score}
+        </p>
+      </div>
+    );
+  };
+
+
+  //  渲染开发者SDK区域信息（提供SDK下载内容）
+  const renderDevelopSDK = () => {
+    return (
+      <div className={styles.detail}>
+        <p>
+          <ApiOutlined
+            style={{
+              marginRight: 8,
+            }}
+          />
+          API接口调用平台：SDK下载 =》
+          <DownloadButton downloadUrl='xxx'/>
+        </p>
+
+        <p>
+          <ApiOutlined
+            style={{
+              marginRight: 8,
+            }}
+          />
+          BI智能图表分析：SDK下载 =》
+          <DownloadButton downloadUrl='xxx'/>
+        </p>
+
+        <p>
+          <DownloadButton downloadUrl=''/>
+          <DownloadButton downloadUrl='xxx'/>
         </p>
       </div>
     );
@@ -153,6 +218,15 @@ const Index: React.FC = () => {
                       <div>API接口调用凭证信息</div>
                     </div>
                     {renderDevelop(userMoreInfo)}
+
+
+                    {/*渲染开发者SDK下载区域*/}
+                    <div className={styles.avatarHolder}>
+                      <div className={styles.name}>SDK下载</div>
+                      <div>开发者SDK：让程序开发更灵活（API接口调用、BI报表分析....）</div>
+                    </div>
+                    {renderDevelopSDK()}
+
 
                     {/*<TagList tags={currentUser.tags || []}/>*/}
                     {/*<Divider*/}
