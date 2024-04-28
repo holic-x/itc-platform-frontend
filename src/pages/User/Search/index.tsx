@@ -20,10 +20,6 @@ const tabList = [
     key: 'interfaces',
     tab: 'API广场',
   },
-  {
-    key: 'users',
-    tab: '用户',
-  },
 ];
 
 const Search: FC<SearchProps> = () => {
@@ -41,9 +37,6 @@ const Search: FC<SearchProps> = () => {
         break;
       case 'interfaces':
         history.push(`${url}/interfaces`);
-        break;
-      case 'users':
-        history.push(`${url}/users`);
         break;
       default:
         break;

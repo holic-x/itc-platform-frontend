@@ -77,7 +77,7 @@ export default [
         name: '📊BI智能板块',
         routes: [
           // 当前路径配置转发规则
-          {path: '/admin/bi', redirect: '/admin/api/chart'},
+          {path: '/admin/bi', redirect: '/admin/bi/chart'},
           {path: '/admin/bi/chart', name: '图表信息管理', component: './Admin/Bi/Chart'},
           {path: '/admin/bi/chartStatistic', name: '图表数据分析', component: './Admin/Bi/ChartStatistic'},
         ],
@@ -119,13 +119,6 @@ export default [
           {
             path: '/searchModule/search',
             redirect: '/searchModule/search/articles',
-          },
-          {
-            name: '用户检索',
-            icon: 'smile',
-            path: '/searchModule/search/users',
-            component: './User/Search/users',
-            // layout: false
           },
           {
             name: '图片检索',
