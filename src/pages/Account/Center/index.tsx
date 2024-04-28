@@ -166,6 +166,7 @@ const Index: React.FC = () => {
           />
           API接口调用平台：SDK下载 =》
           <DownloadButton downloadUrl='xxx'/>
+          <Button onClick={()=>{window.open("https://baidu.com","_blank")}} type="dashed" >查看开发者文档</Button>
         </p>
 
         <p>
@@ -176,6 +177,7 @@ const Index: React.FC = () => {
           />
           BI智能图表分析：SDK下载 =》
           <DownloadButton downloadUrl='xxx'/>
+          <Button onClick={()=>{window.open("https://baidu.com","_blank")}} type="dashed" >查看开发者文档</Button>
         </p>
 
         <p>

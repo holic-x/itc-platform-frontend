@@ -25,17 +25,62 @@ export default [
   // 管理员访问权限控制
   {
     path: '/admin',
-    name: '管理页',
+    name: '后台管理',
     icon: 'crown',
     access: 'canAdmin',
     routes: [
-      {path: '/admin', redirect: '/admin/sub-page'},
+      {
+        // 当前路径规则转发配置（/admin=》重定向到对应为止）
+        path: '/admin', redirect: '/admin/sub-page'},
       // { path: '/admin/sub-page', name: '二级管理页', component: './Admin' },
-      {path: '/admin/userInfo', name: '用户管理', component: './Admin/UserInfo'},
-      {path: '/admin/post', name: '文章管理', component: './Admin/Post'},
-      {path: '/admin/template', name: '模板管理', component: './Admin/Template'},
-      {path: '/admin/dataInfo', name: '数据管理', component: './Admin/DataInfo'},
-      {path: '/admin/search/fetchPost', name: '抓取文章信息管理', component: './Admin/Search/FetchPost'},
+
+      // 基础信息板块
+      {
+        path: '/admin/base',
+        name: '💼基础信息板块',
+        routes: [
+          // 当前路径配置转发规则
+          {path: '/admin/base', redirect: '/admin/base/userInfo'},
+          {path: '/admin/base/userInfo', name: '用户管理', component: './Admin/Base/UserInfo'},
+          {path: '/admin/base/post', name: '文章管理', component: './Admin/Base/Post'},
+          {path: '/admin/base/template', name: '模板管理', component: './Admin/Base/Template'},
+          {path: '/admin/base/dataInfo', name: '数据管理', component: './Admin/Base/DataInfo'},
+        ],
+      },
+
+      // 聚合搜索板块
+      {
+        path: '/admin/search',
+        name: '🔎聚合搜索板块',
+        routes: [
+          // 当前路径配置转发规则
+          {path: '/admin/search', redirect: '/admin/search/fetchPost'},
+          {path: '/admin/search/fetchPost', name: '抓取文章信息管理', component: './Admin/Search/FetchPost'},
+        ],
+      },
+
+      // API开放平台板块
+      {
+        path: '/admin/api',
+        name: '🔗API开放平台板块',
+        routes: [
+          // 当前路径配置转发规则
+          {path: '/admin/api', redirect: '/admin/api/interfaceInfo'},
+          {path: '/admin/api/interfaceInfo', name: '接口信息管理', component: './Admin/Api/InterfaceInfo'},
+        ],
+      },
+
+      // BI智能板块
+      {
+        path: '/admin/bi',
+        name: '📊BI智能板块',
+        routes: [
+          // 当前路径配置转发规则
+          {path: '/admin/bi', redirect: '/admin/api/chart'},
+          {path: '/admin/bi/chart', name: '图表信息管理', component: './Admin/Bi/Chart'},
+          {path: '/admin/bi/chartStatistic', name: '图表数据分析', component: './Admin/Bi/ChartStatistic'},
+        ],
+      },
     ],
   },
 
@@ -52,21 +97,13 @@ export default [
   },
 
 
-  {name: '查询表格', icon: 'table', path: '/mytable', component: './TableList'},
+  // {name: '查询表格', icon: 'table', path: '/mytable', component: './TableList'},
   {path: '/', redirect: '/welcome'},
   {path: '*', layout: false, component: './404'},
 
 
-  // {name: '搜索模块', icon: 'table', path: '/user/search', component: './User/Search'},
 
-  // 搜索模块定义(权限控制)
-  // {
-  //   path: '/search',
-  //   routes: [
-  //     {name: '聚合搜索',  path: '/search',component: './User/Search'},
-  //   ],
-  // },
-
+  // --------------- 用户主页可访问模块定义 ----------------
   // 聚合搜索模块
   {
     path: '/searchModule',
@@ -111,46 +148,40 @@ export default [
       },
     ],
   },
-/*
+
+  // 智能报表模块
   {
-    path: '/list',
+    path: '/biModule',
     icon: 'table',
-    name: '模拟数据',
+    name: '智能报表',
     routes: [
       {
-        path: '/list/search',
-        name: '数据检索',
-        component: './Mod/Search',
+        path: '/biModule/bi',
+        name: '🎰报表分析',
+        // component: './User/Bi',
         routes: [
           {
-            path: '/list/search',
-            redirect: '/list/search/articles',
+            path: '/biModule/bi',
+            redirect: '/biModule/bi/chart',
           },
           {
-            name: '文章检索',
+            name: '智能分析01',
             icon: 'smile',
-            path: '/list/search/articles',
-            component: './Mod/Search/articles',
-          },
-          {
-            name: '项目检索',
-            icon: 'smile',
-            path: '/list/search/projects',
-            component: './Mod/Search/projects',
-          },
-          {
-            name: '应用检索',
-            icon: 'smile',
-            path: '/list/search/applications',
-            component: './Mod/Search/applications',
-          },
+            path: '/biModule/bi/chart',
+            component: './User/Bi/Chart',
+            // layout: false
+          }
         ],
       },
+
+      {
+        path: '/biModule/bi/chartStatistic',
+        name: '🎰报表统计',
+        component: './Admin/Bi/ChartStatistic',
+      },
+
     ],
   },
-
-
-*/
 
 
 ];
