@@ -16,7 +16,14 @@ import {
   listChartByPageUsingPost,
 } from '@/services/itc-platform/chartController';
 
+import ShowChartModal from "@/pages/Admin/Bi/Chart/components/ShowChartModal";
+
 const Index: React.FC = () => {
+
+  // 查看图表信息窗口的弹窗、定义当前弹窗数据
+  const [showChartModalOpen, handleShowChartModalOpen] = useState<boolean>(false);
+  const [currentChartDataDetail, setCurrentChartDataDetail] = useState<API.Chart>();
+
 
   // 抽屉式弹窗（查看详情）
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -76,6 +83,19 @@ const Index: React.FC = () => {
      */
   };
 
+  /**
+   * 查看节点数据
+   */
+  const handleShowChart = (record:API.Chart)=>{
+    // 校验当前选中行
+    if (!record) return true;
+    // 设置弹窗内容
+    // alert(record.goal);
+    // alert(record.genChart);
+    setCurrentChartDataDetail(record);
+    // 打开弹窗
+    handleShowChartModalOpen(true);
+  }
 
   /**
    * 删除节点
@@ -272,6 +292,16 @@ const Index: React.FC = () => {
           </a>
           : null,
 
+        record.status === 'succeed' ?
+          // todo 查看详情信息
+          <a key="publish"
+             onClick={() => {
+               handleShowChart(record);
+             }}>
+            查看
+          </a>
+          : null,
+
         <a key="delete"
            onClick={() => {
              // 触发删除操作
@@ -393,6 +423,18 @@ const Index: React.FC = () => {
           />
         )}
       </Drawer>
+
+
+      {/* 创建一个ShowChartModal组件，用于在点击查看图表按钮时弹出 */}
+      <ShowChartModal
+        chartDataDetail={currentChartDataDetail}
+        // 当取消按钮被点击时,设置更新模态框为false以隐藏模态窗口
+        onCancel={() => {
+          handleShowChartModalOpen(false);
+        }}
+        // 根据更新窗口的值决定模态窗口是否显示
+        visible={showChartModalOpen}
+      />
 
     </PageContainer>
   );
