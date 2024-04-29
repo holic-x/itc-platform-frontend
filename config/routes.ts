@@ -173,18 +173,18 @@ export default [
     routes: [
       {
         path: '/biModule/bi',
-        name: '🎰报表分析',
+        name: '🎰智能分析',
         // component: './User/Bi',
         routes: [
           {
             path: '/biModule/bi',
-            redirect: '/biModule/bi/chart',
+            redirect: '/biModule/bi/analysis/base',
           },
           {
-            name: '智能分析01',
+            name: '智能分析-基础版',
             icon: 'smile',
-            path: '/biModule/bi/chart',
-            component: './User/Bi/Chart',
+            path: '/biModule/bi/analysis/base',
+            component: './User/Bi/Analysis/Base',
             // layout: false
           }
         ],
