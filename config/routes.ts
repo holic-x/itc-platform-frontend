@@ -186,15 +186,30 @@ export default [
             path: '/biModule/bi/analysis/base',
             component: './User/Bi/Analysis/Base',
             // layout: false
+          },
+          {
+            name: '智能分析-优化版',
+            icon: 'smile',
+            path: '/biModule/bi/analysis/asyncOptimize',
+            component: './User/Bi/Analysis/AsyncOptimize',
+            // layout: false
           }
         ],
       },
 
       {
+        path: '/biModule/bi/myChart',
+        name: '🎰我的图表',
+        component: './User/Bi/MyChart',
+      },
+
+      /*
+      {
         path: '/biModule/bi/chartStatistic',
         name: '🎰报表统计',
         component: './Admin/Bi/ChartStatistic',
       },
+       */
 
     ],
   },
