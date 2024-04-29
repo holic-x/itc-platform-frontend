@@ -47,6 +47,21 @@ export async function getInterfaceInfoVoByIdUsingGet(
   });
 }
 
+/** handleInterfaceInfoStatus POST /api/admin/interfaceInfo/handleInterfaceInfoStatus */
+export async function handleInterfaceInfoStatusUsingPost(
+  body: API.HandleInterfaceInfoStatusRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseBoolean_>('/api/admin/interfaceInfo/handleInterfaceInfoStatus', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** invokeInterfaceInfo POST /api/admin/interfaceInfo/invoke */
 export async function invokeInterfaceInfoUsingPost(
   body: API.InterfaceInfoInvokeRequest,
@@ -269,6 +284,21 @@ export async function listMyInterfaceInfoVoByPageUsingPost1(
   options?: { [key: string]: any },
 ) {
   return request<API.BaseResponsePageInterfaceInfo_>('/api/user/interfaceInfo/my/list/page/vo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** publishInterfaceInfo POST /api/user/interfaceInfo/publish */
+export async function publishInterfaceInfoUsingPost(
+  body: API.IdRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseBoolean_>('/api/user/interfaceInfo/publish', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

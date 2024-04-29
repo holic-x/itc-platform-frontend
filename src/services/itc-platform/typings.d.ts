@@ -422,6 +422,11 @@ declare namespace API {
     id?: number;
   };
 
+  type HandleInterfaceInfoStatusRequest = {
+    id?: number;
+    status?: number;
+  };
+
   type IdRequest = {
     id?: number;
   };

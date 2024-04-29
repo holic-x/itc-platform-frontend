@@ -14,12 +14,13 @@ import UpdateModal from './components/UpdateModal';
 // 引入接口信息管理相关API
 import {
   addInterfaceInfoUsingPost,
-  deleteInterfaceInfoUsingPost,
+  deleteInterfaceInfoUsingPost, handleInterfaceInfoStatusUsingPost,
   listInterfaceInfoByPageUsingPost,
   offlineInterfaceInfoUsingPost,
-  onlineInterfaceInfoUsingPost,
+  onlineInterfaceInfoUsingPost, publishInterfaceInfoUsingPost,
   updateInterfaceInfoUsingPost
 } from '@/services/itc-platform/interfaceInfoController';
+import {handlePostStatusUsingPost} from "@/services/itc-platform/postController";
 
 
 const TableList: React.FC = () => {
@@ -122,6 +123,33 @@ const TableList: React.FC = () => {
   };
 
   /**
+   * @zh-CN 发布/重新发布接口节点
+   * @param selectedRows
+   */
+  const handlePublish = async (record: API.InterfaceInfo) => {
+    // 设置加载中的提示为'正在处理'
+    const hide = message.loading('正在处理');
+    if (!record) return true;
+    try {
+      // 调用接口
+      await publishInterfaceInfoUsingPost({
+        id: record.id
+      });
+      hide();
+      // 如果调用成功会提示'处理成功'
+      message.success('处理成功');
+      // 处理成功自动刷新表单
+      actionRef.current?.reload();
+      return true;
+    } catch (error: any) {
+      hide();
+      // 否则提示'处理成功' + 报错信息
+      message.error('处理成功，' + error.message);
+      return false;
+    }
+  };
+
+  /**
    * @zh-CN 上线接口节点
    * @param selectedRows
    */
@@ -147,6 +175,36 @@ const TableList: React.FC = () => {
       return false;
     }
   };
+
+
+  /**
+   * @zh-CN 处理审核状态节点
+   * @param selectedRows
+   */
+  const handleAuditStatus = async (record: API.InterfaceInfo,status:string) => {
+    // 设置加载中的提示为'正在处理'
+    const hide = message.loading('正在处理');
+    if (!record) return true;
+    try {
+      // 调用接口
+      await handleInterfaceInfoStatusUsingPost({
+        id: record.id,
+        status: status
+      });
+      hide();
+      // 如果调用成功会提示'处理成功'
+      message.success('处理成功');
+      // 处理成功自动刷新表单
+      actionRef.current?.reload();
+      return true;
+    } catch (error: any) {
+      hide();
+      // 否则提示'处理成功' + 报错信息
+      message.error('处理成功，' + error.message);
+      return false;
+    }
+  };
+
 
   /**
    * @zh-CN 下线接口节点
@@ -249,13 +307,29 @@ const TableList: React.FC = () => {
       dataIndex: 'status',
       hideInForm: true,
       valueEnum: {
-        0: {
-          text: '关闭',
+        1: {
+          text: '草稿',
           status: 'Default',
         },
-        1: {
-          text: '开启',
+        2: {
+          text: '待审核',
           status: 'Processing',
+        },
+        3: {
+          text: '审核通过',
+          status: 'Success',
+        },
+        4: {
+          text: '审核失败',
+          status: 'Error',
+        },
+        5: {
+          text: '上线中',
+          status: 'Warning',
+        },
+        0: {
+          text: '禁用',
+          status: 'Default',
         },
       },
     },
@@ -288,7 +362,31 @@ const TableList: React.FC = () => {
           修改
         </a>,
 
-        record.status === 0 ?
+        record.status === 1 ?
+          <a key="publish"
+             onClick={() => {
+               handlePublish(record);
+             }}>
+            发布
+          </a> : null,
+
+        record.status === 2 ?
+          <a key="auditPass"
+             onClick={() => {
+               handleAuditStatus(record,'3');
+             }}>
+            审核通过
+          </a> : null,
+
+        record.status === 2 ?
+          <a key="auditReject"
+             onClick={() => {
+               handleAuditStatus(record,'4');
+             }}>
+            审核拒绝
+          </a> : null,
+
+        record.status === 3 ||  record.status === 0?
           <a key="online"
              onClick={() => {
                handleOnline(record);
@@ -296,12 +394,20 @@ const TableList: React.FC = () => {
             上线
           </a> : null,
 
-        record.status === 1 ?
+        record.status === 4 ?
+          <a key="republish"
+             onClick={() => {
+               handlePublish(record);
+             }}>
+            重提审核
+          </a> : null,
+
+        record.status === 5 ?
           <a key="offline"
              onClick={() => {
                handleOffline(record);
              }}>
-            下线
+            禁用
           </a> : null,
 
         <a key="config"
