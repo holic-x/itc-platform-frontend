@@ -1,10 +1,10 @@
 import {PlusOutlined} from '@ant-design/icons';
 import type {ActionType, ProColumns, ProDescriptionsItemProps} from '@ant-design/pro-components';
 import {FooterToolbar, PageContainer, ProDescriptions, ProTable,} from '@ant-design/pro-components';
-import '@umijs/max';
-import {Button, Drawer, message} from 'antd';
+import {Button, Drawer, message, Tabs, TabPane} from 'antd';
 import React, {useRef, useState} from 'react';
 import type {FormValueType} from './components/UpdateForm';
+import { useModel } from '@umijs/max';
 
 // 接入自定义模态框或组件
 import CreateModal from './components/CreateModal';
@@ -36,6 +36,12 @@ const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.InterfaceInfo>();
   const [selectedRowsState, setSelectedRows] = useState<API.InterfaceInfo[]>([]);
+
+
+  const [activeTabKey, setActiveTabKey] = useState('-1');
+  // 从全局状态中获取登陆用户信息（用于鉴权）
+  const {initialState} = useModel('@@initialState');
+  const {currentUser} = initialState ?? {};
 
 
   /**
@@ -181,7 +187,7 @@ const TableList: React.FC = () => {
    * @zh-CN 处理审核状态节点
    * @param selectedRows
    */
-  const handleAuditStatus = async (record: API.InterfaceInfo,status:string) => {
+  const handleAuditStatus = async (record: API.InterfaceInfo, status: string) => {
     // 设置加载中的提示为'正在处理'
     const hide = message.loading('正在处理');
     if (!record) return true;
@@ -239,7 +245,6 @@ const TableList: React.FC = () => {
       title: '接口id',
       dataIndex: 'id',
       valueType: 'index',
-      /*
       tip: 'The rule name is the unique key',
       render: (dom, entity) => {
         return (
@@ -253,7 +258,6 @@ const TableList: React.FC = () => {
           </a>
         );
       },
-      */
     },
     {
       title: '接口名称',
@@ -370,36 +374,45 @@ const TableList: React.FC = () => {
             发布
           </a> : null,
 
-        record.status === 2 ?
-          <a key="auditPass"
-             onClick={() => {
-               handleAuditStatus(record,'3');
-             }}>
-            审核通过
-          </a> : null,
+        // 审核相关：仅管理员角色可操作
+        currentUser.userRole === 'admin' ?(
 
-        record.status === 2 ?
-          <a key="auditReject"
-             onClick={() => {
-               handleAuditStatus(record,'4');
-             }}>
-            审核拒绝
-          </a> : null,
+          record.status === 2 ?
+            <a key="auditPass"
+               onClick={() => {
+                 handleAuditStatus(record, '3');
+               }}>
+              审核通过
+            </a> : null,
 
-        record.status === 3 ||  record.status === 0?
+            record.status === 2 ?
+              <a key="auditReject"
+                 onClick={() => {
+                   handleAuditStatus(record, '4');
+                 }}>
+                审核拒绝
+              </a> : null
+
+        ):null,
+
+        // 用户可操作：发布、重提审核
+        currentUser.userRole === 'user' ?(
+          record.status === 4 ?
+            <a key="reAduit"
+               onClick={() => {
+                 handlePublish(record);
+               }}>
+              重提审核
+            </a> : null
+        ):null,
+
+
+        record.status === 3 || record.status === 0 ?
           <a key="online"
              onClick={() => {
                handleOnline(record);
              }}>
             上线
-          </a> : null,
-
-        record.status === 4 ?
-          <a key="republish"
-             onClick={() => {
-               handlePublish(record);
-             }}>
-            重提审核
           </a> : null,
 
         record.status === 5 ?
@@ -440,15 +453,49 @@ const TableList: React.FC = () => {
             <PlusOutlined/> 新建
           </Button>,
         ]}
-        // 原脚手架默认调用API接口
-        // request={rule}
 
-        // request={listInterfaceInfoByPageUsingPost} // 直接调用的话无法渲染，因为响应数据交互不匹配
+        // 设置标签页
+        toolbar={{
+          menu: {
+            type: "tab", // inline、dropdown
+            activeKey: activeTabKey,
+            // defaultActiveKey: "all", // 设置默认激活标签
+            onChange: (key: any) => {
+              // 设置表单激活
+              setActiveTabKey(key);
+              if(actionRef?.current) {
+                // 刷新表单数据
+                actionRef?.current.reload();
+              }
+            },
+            items: [
+              // 为了避免重复转化，此处tabKey和后端接口status一致,或者在请求前自行转化
+              // （此处注意key不能重复否则渲染失败，key相同指向同一个tab无法明确）
+              {
+                label: '所有',
+                key: '-1'
+              },
+              {
+                label: '待审核',
+                key: '2'
+              },
+              {
+                label: '已上线',
+                key: '5'
+              },
+              {
+                label: '已下线',
+                key: '0'
+              }
+            ]
+          }
+        }}
 
         // 根据request规则，重新编写请求和响应处理
         request={async (params, sort: Record<string, SortOrder>, filter: Record<string, React.ReactText[] | null>) => {
           const res = await listInterfaceInfoByPageUsingPost({
-            ...params
+            ...params,
+            status: activeTabKey  // 如果查找全部则不需要执行状态，如果查找指定状态记录则传入指定状态即可
           })
           if (res?.data) {
             return {
@@ -497,7 +544,8 @@ const TableList: React.FC = () => {
           </Button>
           <Button type="primary">批量审批</Button>
         </FooterToolbar>
-      )}
+      )
+      }
 
 
       <UpdateModal columns={columns}
@@ -547,7 +595,8 @@ const TableList: React.FC = () => {
       </Drawer>
 
 
-      {/* 创建一个CreateModal组件，用于在点击新增按钮时弹出 */}
+      {/* 创建一个CreateModal组件，用于在点击新增按钮时弹出 */
+      }
       <CreateModal
         columns={columns}
         // 当取消按钮被点击时,设置更新模态框为false以隐藏模态窗口
@@ -564,6 +613,7 @@ const TableList: React.FC = () => {
 
 
     </PageContainer>
-  );
+  )
+    ;
 };
 export default TableList;
