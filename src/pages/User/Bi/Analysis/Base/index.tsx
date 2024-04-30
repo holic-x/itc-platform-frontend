@@ -19,7 +19,7 @@ import TextArea from 'antd/es/input/TextArea';
 import EChartsReact from 'echarts-for-react';
 
 
-import { genChartByAiSyncUsingPost } from '@/services/itc-platform/chartController';
+import { genChartByAiSyncUsingPost } from '@/services/itc-platform/analysicController';
 
 const Index: React.FC = () => {
   // 定义状态，接收后端返回值，实时展示在页面上

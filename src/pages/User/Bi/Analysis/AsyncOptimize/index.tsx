@@ -15,7 +15,7 @@ import {
 } from 'antd';
 import {useForm} from 'antd/es/form/Form';
 import TextArea from 'antd/es/input/TextArea';
-import {genChartByAiAsyncUsingPost} from '@/services/itc-platform/chartController';
+import {genChartByAiAsyncUsingPost} from '@/services/itc-platform/analysicController';
 
 
 const AddChartAsync: React.FC = () => {

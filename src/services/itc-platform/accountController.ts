@@ -2,6 +2,14 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
+/** getUserVOMoreByCurrentLoginUser GET /api/account/account/getUserVOMoreByCurrentLoginUser */
+export async function getUserVoMoreByCurrentLoginUserUsingGet(options?: { [key: string]: any }) {
+  return request<API.BaseResponseUserVO_>('/api/account/account/getUserVOMoreByCurrentLoginUser', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** getCurrentLoginUser GET /api/account/get/login */
 export async function getCurrentLoginUserUsingGet(options?: { [key: string]: any }) {
   return request<API.BaseResponseLoginUserVO_>('/api/account/get/login', {

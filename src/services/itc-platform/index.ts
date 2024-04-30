@@ -3,6 +3,7 @@
 // API 更新时间：
 // API 唯一标识：
 import * as accountController from './accountController';
+import * as analysicController from './analysicController';
 import * as apiSquareController from './apiSquareController';
 import * as chartController from './chartController';
 import * as dataInfoController from './dataInfoController';
@@ -29,6 +30,7 @@ export default {
   postController,
   postFavourController,
   postThumbController,
+  analysicController,
   chartController,
   apiSquareController,
   interfaceInfoStatisticController,

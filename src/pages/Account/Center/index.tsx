@@ -9,7 +9,7 @@ import {useModel} from "@@/exports";
 
 // 引入自定义样式
 import useStyles from './Center.style';
-import {getUserVoMoreByCurrentLoginUserUsingGet} from "@/services/itc-platform/userController";
+import {getUserVoMoreByCurrentLoginUserUsingGet} from "@/services/itc-platform/accountController";
 
 // 引入自定义组件（复制按钮）
 import CopyButton from "@/components/Common/CopyButton";
@@ -191,8 +191,8 @@ const Index: React.FC = () => {
   return (
     <PageContainer>
       <GridContent>
-        <Row gutter={24}>
-          <Col lg={7} md={24}>
+        <Row >
+          <Col>
             <Card
               bordered={false}
               style={{
