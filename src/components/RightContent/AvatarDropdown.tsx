@@ -1,4 +1,4 @@
-import { userLogoutUsingPost } from '@/services/itc-platform/userController';
+import { logoutUsingPost } from '@/services/itc-platform/accountController';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { history, useModel } from '@umijs/max';
 import { Spin } from 'antd';
@@ -53,7 +53,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
 
         // ------- start 登录注销实现 -------
         // 调用后台接口实现登录注销
-        userLogoutUsingPost();
+        logoutUsingPost();
         // 跳转到登录界面
         const { search, pathname } = window.location;
         const redirect = pathname + search;

@@ -1,6 +1,7 @@
 import {Footer} from '@/components';
 import {getFakeCaptcha} from '@/services/ant-design-pro/login';
-import {getLoginUserUsingGet, userLoginUsingPost} from '@/services/itc-platform/userController';
+import {getCurrentLoginUserUsingGet} from '@/services/itc-platform/accountController';
+import { loginUsingPost} from '@/services/itc-platform/accountController';
 import {
   AlipayCircleOutlined,
   LockOutlined,
@@ -94,7 +95,7 @@ const Login: React.FC = () => {
    * 登陆成功后，获取用户登录信息
    */
   const fetchUserInfo = async () => {
-    const userInfo = await getLoginUserUsingGet();
+    const userInfo = await getCurrentLoginUserUsingGet();
     if (userInfo) {
       flushSync(() => {
         setInitialState((s) => ({
@@ -116,7 +117,8 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: API.UserLoginRequest) => {
     try {
       // 登录
-      const res = await userLoginUsingPost(values);
+      const res = await loginUsingPost(values);
+
       if (res.code === 0) {
         const defaultLoginSuccessMessage = '登录成功！';
         message.success(defaultLoginSuccessMessage);

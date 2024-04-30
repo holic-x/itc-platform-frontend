@@ -4,7 +4,7 @@ import { SettingDrawer } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { Link, history } from '@umijs/max';
 import { errorConfig } from './requestConfig';
-import { getLoginUserUsingGet } from './services/itc-platform/userController';
+import { getCurrentLoginUserUsingGet } from './services/itc-platform/accountController';
 const isDev = process.env.NODE_ENV === 'development';
 import defaultSettings from '../config/defaultSettings';
 const loginPath = '/user/login';
@@ -18,7 +18,7 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      const res = await getLoginUserUsingGet();
+      const res = await getCurrentLoginUserUsingGet();
       return res.data;
     } catch (error) {
       history.push(loginPath);

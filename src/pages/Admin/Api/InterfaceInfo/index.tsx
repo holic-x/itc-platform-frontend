@@ -4,7 +4,7 @@ import {FooterToolbar, PageContainer, ProDescriptions, ProTable,} from '@ant-des
 import {Button, Drawer, message, Tabs, TabPane} from 'antd';
 import React, {useRef, useState} from 'react';
 import type {FormValueType} from './components/UpdateForm';
-import { useModel } from '@umijs/max';
+import {useModel} from '@umijs/max';
 
 // 接入自定义模态框或组件
 import CreateModal from './components/CreateModal';
@@ -129,33 +129,6 @@ const TableList: React.FC = () => {
   };
 
   /**
-   * @zh-CN 发布/重新发布接口节点
-   * @param selectedRows
-   */
-  const handlePublish = async (record: API.InterfaceInfo) => {
-    // 设置加载中的提示为'正在处理'
-    const hide = message.loading('正在处理');
-    if (!record) return true;
-    try {
-      // 调用接口
-      await publishInterfaceInfoUsingPost({
-        id: record.id
-      });
-      hide();
-      // 如果调用成功会提示'处理成功'
-      message.success('处理成功');
-      // 处理成功自动刷新表单
-      actionRef.current?.reload();
-      return true;
-    } catch (error: any) {
-      hide();
-      // 否则提示'处理成功' + 报错信息
-      message.error('处理成功，' + error.message);
-      return false;
-    }
-  };
-
-  /**
    * @zh-CN 上线接口节点
    * @param selectedRows
    */
@@ -182,12 +155,11 @@ const TableList: React.FC = () => {
     }
   };
 
-
   /**
-   * @zh-CN 处理审核状态节点
+   * @zh-CN 处理节点（修改节点状态）
    * @param selectedRows
    */
-  const handleAuditStatus = async (record: API.InterfaceInfo, status: string) => {
+  const handleStatus = async (record: API.InterfaceInfo, status: number) => {
     // 设置加载中的提示为'正在处理'
     const hide = message.loading('正在处理');
     if (!record) return true;
@@ -212,40 +184,12 @@ const TableList: React.FC = () => {
   };
 
 
-  /**
-   * @zh-CN 下线接口节点
-   * @param selectedRows
-   */
-  const handleOffline = async (record: API.InterfaceInfo) => {
-    // 设置加载中的提示为'正在处理'
-    const hide = message.loading('正在处理');
-    if (!record) return true;
-    try {
-      // 调用接口
-      await offlineInterfaceInfoUsingPost({
-        id: record.id
-      });
-      hide();
-      // 如果调用成功会提示'处理成功'
-      message.success('处理成功');
-      // 处理成功自动刷新表单
-      actionRef.current?.reload();
-      return true;
-    } catch (error: any) {
-      hide();
-      // 否则提示'处理成功' + 报错信息
-      message.error('处理成功，' + error.message);
-      return false;
-    }
-  };
-
   // 修改接口管理信息（原默认生成的是规则信息管理相关）
   const columns: ProColumns<API.InterfaceInfo>[] = [
     {
       title: '接口id',
       dataIndex: 'id',
       valueType: 'index',
-      tip: 'The rule name is the unique key',
       render: (dom, entity) => {
         return (
           <a
@@ -369,18 +313,18 @@ const TableList: React.FC = () => {
         record.status === 1 ?
           <a key="publish"
              onClick={() => {
-               handlePublish(record);
+               handleStatus(record, 2);
              }}>
             发布
           </a> : null,
 
         // 审核相关：仅管理员角色可操作
-        currentUser.userRole === 'admin' ?(
+        currentUser.userRole === 'admin' ? (
 
           record.status === 2 ?
             <a key="auditPass"
                onClick={() => {
-                 handleAuditStatus(record, '3');
+                 handleStatus(record, 3);
                }}>
               审核通过
             </a> : null,
@@ -388,23 +332,23 @@ const TableList: React.FC = () => {
             record.status === 2 ?
               <a key="auditReject"
                  onClick={() => {
-                   handleAuditStatus(record, '4');
+                   handleStatus(record, 4);
                  }}>
                 审核拒绝
               </a> : null
 
-        ):null,
+        ) : null,
 
         // 用户可操作：发布、重提审核
-        currentUser.userRole === 'user' ?(
+        currentUser.userRole === 'user' ? (
           record.status === 4 ?
             <a key="reAduit"
                onClick={() => {
-                 handlePublish(record);
+                 handleStatus(record, 2);
                }}>
               重提审核
             </a> : null
-        ):null,
+        ) : null,
 
 
         record.status === 3 || record.status === 0 ?
@@ -418,7 +362,7 @@ const TableList: React.FC = () => {
         record.status === 5 ?
           <a key="offline"
              onClick={() => {
-               handleOffline(record);
+               handleStatus(record, '0');
              }}>
             禁用
           </a> : null,
@@ -438,7 +382,9 @@ const TableList: React.FC = () => {
       <ProTable<API.RuleListItem, API.PageParams>
         headerTitle={'查询表格'}
         actionRef={actionRef}
-        rowKey="key"
+        // ProTable中配置rowKey（此处rowKey对应的是唯一键，和设定的columns中的属性定义字段一致，例如此处根据id来组合多选行。
+        // 如果指定的rowKey不存在，则会出现选中一个却全部被选的情况）
+        rowKey="id"
         search={{
           labelWidth: 120,
         }}
@@ -463,7 +409,7 @@ const TableList: React.FC = () => {
             onChange: (key: any) => {
               // 设置表单激活
               setActiveTabKey(key);
-              if(actionRef?.current) {
+              if (actionRef?.current) {
                 // 刷新表单数据
                 actionRef?.current.reload();
               }
@@ -495,13 +441,13 @@ const TableList: React.FC = () => {
         request={async (params, sort: Record<string, SortOrder>, filter: Record<string, React.ReactText[] | null>) => {
           const res = await listInterfaceInfoByPageUsingPost({
             ...params,
-            status: activeTabKey  // 如果查找全部则不需要执行状态，如果查找指定状态记录则传入指定状态即可
+            "status": activeTabKey  // 如果查找全部则不需要执行状态，如果查找指定状态记录则传入指定状态即可
           })
           if (res?.data) {
             return {
-              data: res?.data.records || [],
-              success: true,
-              total: res.total,
+              "data": res?.data.records || [],
+              "success": true,
+              "total": res.total,
             }
           }
         }}
@@ -528,7 +474,7 @@ const TableList: React.FC = () => {
               </a>{' '}
               项 &nbsp;&nbsp;
               <span>
-                服务调用次数总计 {selectedRowsState.reduce((pre, item) => pre + item.callNo!, 0)} 万
+                {/*服务调用次数总计 {selectedRowsState.reduce((pre, item) => pre + item.callNo!, 0)} 万*/}
               </span>
             </div>
           }

@@ -2,6 +2,7 @@
 /* eslint-disable */
 // API 更新时间：
 // API 唯一标识：
+import * as accountController from './accountController';
 import * as apiSquareController from './apiSquareController';
 import * as chartController from './chartController';
 import * as dataInfoController from './dataInfoController';
@@ -20,6 +21,7 @@ import * as userInterfaceInfoController from './userInterfaceInfoController';
 import * as wxMpController from './wxMpController';
 export default {
   wxMpController,
+  accountController,
   dataInfoController,
   fetchPostController,
   fileController,

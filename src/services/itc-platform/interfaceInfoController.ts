@@ -77,24 +77,6 @@ export async function invokeInterfaceInfoUsingPost(
   });
 }
 
-/** listOnlineInterfaceInfoByPage POST /api/admin/interfaceInfo/list/listOnlineInterfaceInfo */
-export async function listOnlineInterfaceInfoByPageUsingPost(
-  body: API.InterfaceInfoQueryRequest,
-  options?: { [key: string]: any },
-) {
-  return request<API.BaseResponsePageInterfaceInfo_>(
-    '/api/admin/interfaceInfo/list/listOnlineInterfaceInfo',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: body,
-      ...(options || {}),
-    },
-  );
-}
-
 /** listInterfaceInfoByPage POST /api/admin/interfaceInfo/list/page */
 export async function listInterfaceInfoByPageUsingPost(
   body: API.InterfaceInfoQueryRequest,
@@ -110,42 +92,12 @@ export async function listInterfaceInfoByPageUsingPost(
   });
 }
 
-/** listInterfaceInfoVOByPage POST /api/admin/interfaceInfo/list/page/vo */
-export async function listInterfaceInfoVoByPageUsingPost(
-  body: API.InterfaceInfoQueryRequest,
-  options?: { [key: string]: any },
-) {
-  return request<API.BaseResponsePageInterfaceInfo_>('/api/admin/interfaceInfo/list/page/vo', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
-    ...(options || {}),
-  });
-}
-
 /** listMyInterfaceInfoVOByPage POST /api/admin/interfaceInfo/my/list/page/vo */
 export async function listMyInterfaceInfoVoByPageUsingPost(
   body: API.InterfaceInfoQueryRequest,
   options?: { [key: string]: any },
 ) {
   return request<API.BaseResponsePageInterfaceInfo_>('/api/admin/interfaceInfo/my/list/page/vo', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
-    ...(options || {}),
-  });
-}
-
-/** offlineInterfaceInfo POST /api/admin/interfaceInfo/offline */
-export async function offlineInterfaceInfoUsingPost(
-  body: API.IdRequest,
-  options?: { [key: string]: any },
-) {
-  return request<API.BaseResponseBoolean_>('/api/admin/interfaceInfo/offline', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
