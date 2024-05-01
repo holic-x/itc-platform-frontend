@@ -1,27 +1,22 @@
-import {PlusOutlined} from '@ant-design/icons';
 import type {ActionType, ProColumns, ProDescriptionsItemProps} from '@ant-design/pro-components';
-import {
-  PageContainer,
-  ProDescriptions,
-  ProTable
-} from '@ant-design/pro-components';
+import {ProDescriptions, ProTable} from '@ant-design/pro-components';
 import '@umijs/max';
-import {Button, Drawer, message, Tag, Select} from 'antd';
+import {Drawer, Tag} from 'antd';
 import React, {useRef, useState} from 'react';
 
 // 引入文章信息管理相关API
-import {
-  listFetchPostVoByPageForUserUsingPost,
-} from '@/services/itc-platform/fetchPostController';
-
+import {listFetchPostVoByPageForUserUsingPost,} from '@/services/itc-platform/fetchPostController';
+import {searchAllByCondAdaptorUsingPost} from "@/services/itc-platform/searchOptimizeController";
 
 const TableList: React.FC = () => {
 
   // 定义全局搜索参数
-  const params = {
-    searchText: 'xxx',
-    searchType: 'picture',
-  }
+  const searchParams = new URLSearchParams(location.search);
+  const searchText = searchParams.get('searchText');
+  const searchParam = {
+    searchText: searchText,
+    searchType: 'articles',
+  };
 
   // 抽屉式弹窗（查看详情）
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -89,6 +84,7 @@ const TableList: React.FC = () => {
       render: (_, record) => (
         <span>
                   {
+                    // JSON.parse(record.tags).map((name) => ()  如果是字符串格式的tags则可通过JSON解析处理，或者直接用后台处理好的tagList
                     record.tagList.map((name) => (
                       <Tag color="blue" key={name}>
                         {name}
@@ -99,7 +95,6 @@ const TableList: React.FC = () => {
       ),
       hideInSearch: true,
     },
-
 
     {
       title: '文章内容',
@@ -198,16 +193,36 @@ const TableList: React.FC = () => {
 
         // 根据request规则，重新编写请求和响应处理
         request={async (params, sort: Record<string, SortOrder>, filter: Record<string, React.ReactText[] | null>) => {
-          const res = await listFetchPostVoByPageForUserUsingPost({
-            ...params
+          // 调用数据库获取数据
+          // const res = await listFetchPostVoByPageForUserUsingPost({
+          //   ...params,
+          //   searchParam
+          // })
+          // if (res?.data) {
+          //   return {
+          //     data: res?.data.records || [],
+          //     success: true,
+          //     total: res.total,
+          //   }
+          // }
+
+          // 调用聚合接口（从ES中获取数据）
+          const res = await searchAllByCondAdaptorUsingPost({
+            ...params,
+            "searchText": searchParam.searchText,
+            "searchType": "articles",
           })
+
+
           if (res?.data) {
             return {
-              data: res?.data.records || [],
+              data: res?.data.dataList || [],
               success: true,
-              total: res.total,
+              total: res.dataList,
             }
           }
+
+
         }}
 
         // 列属性定义

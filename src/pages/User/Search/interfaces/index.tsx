@@ -75,6 +75,15 @@ const CardInfo: React.FC<{
 export const Applications: FC<Record<string, any>> = () => {
   const { styles } = useStyles();
 
+  // 定义全局搜索参数
+  const searchParams = new URLSearchParams(location.search);
+  const searchText = searchParams.get('searchText');
+  const searchParam = {
+    searchText: searchText,
+    searchType: 'articles',
+  };
+
+
   // 定义全局响应参数
   const [resData,setResData]  = useState();
 
@@ -104,13 +113,14 @@ export const Applications: FC<Record<string, any>> = () => {
       "interfaceName": "",
       "interfaceStatus": "",
       "interfaceType": "",
-      "userName": ""
+      "userName": "",
+      "searchType": searchParam.searchType,
+      "searchText": searchParam.searchText
     }).then(res=>{
       setResData(res.data);
       console.error('res',res)
     });
   },[])
-
 
 
   // 分页处理
@@ -140,6 +150,7 @@ export const Applications: FC<Record<string, any>> = () => {
               {/*      {category.label}*/}
               {/*    </TagSelect.Option>*/}
               {/*  ))}*/}
+              {/*  */}
               {/*</TagSelect>*/}
 
             </Form.Item>

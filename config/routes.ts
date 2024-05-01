@@ -73,8 +73,7 @@ export default [
 
       // BI智能板块
       {
-        path: '/admin/bi',
-        name: '📊BI智能板块',
+        path: '/admin/bi',        name: '📊BI智能板块',
         routes: [
           // 当前路径配置转发规则
           {path: '/admin/bi', redirect: '/admin/bi/chart'},
@@ -193,7 +192,7 @@ export default [
             path: '/biModule/bi/analysis/asyncOptimize',
             component: './User/Bi/Analysis/AsyncOptimize',
             // layout: false
-          }
+          },
         ],
       },
 
@@ -213,6 +212,8 @@ export default [
 
     ],
   },
+
+  {path: '/test',name:'测试', component: './User/Test'},
 
 
 ];

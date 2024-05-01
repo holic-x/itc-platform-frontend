@@ -2,14 +2,26 @@ import {searchAllByCondAdaptorUsingPost} from '@/services/itc-platform/searchOpt
 import {Card, List} from 'antd';
 import React, { useEffect,useState } from 'react';
 
-const params = {
-  searchText: '小黑子',
-  searchType: 'pictures',
-};
-console.log(params);
+
+
+
+
 
 
 const Index: React.FC = () => {
+
+  const searchParams = new URLSearchParams(location.search);
+  const searchText = searchParams.get('searchText');
+  const params = {
+    searchText: searchText,
+    searchType: 'pictures',
+  };
+
+// const params = {
+//   searchText: '小黑子',
+//   searchType: 'pictures',
+// };
+  console.log('params:'+searchText);
 
 
   // 请求接口获取图片信息
@@ -40,6 +52,7 @@ const Index: React.FC = () => {
       console.error('res',res)
     });
   },[])
+
 
   return (
     // 页面信息定义（search）
