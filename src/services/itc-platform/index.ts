@@ -11,6 +11,7 @@ import * as fetchPostController from './fetchPostController';
 import * as fileController from './fileController';
 import * as interfaceInfoController from './interfaceInfoController';
 import * as interfaceInfoStatisticController from './interfaceInfoStatisticController';
+import * as notificationController from './notificationController';
 import * as postController from './postController';
 import * as postFavourController from './postFavourController';
 import * as postThumbController from './postThumbController';
@@ -23,6 +24,7 @@ import * as wxMpController from './wxMpController';
 export default {
   wxMpController,
   accountController,
+  notificationController,
   dataInfoController,
   fetchPostController,
   fileController,

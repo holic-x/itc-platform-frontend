@@ -1,4 +1,4 @@
-import {PlusOutlined} from '@ant-design/icons';
+import {PlusOutlined,ApiOutlined} from '@ant-design/icons';
 import type {ActionType, ProColumns, ProDescriptionsItemProps} from '@ant-design/pro-components';
 import {
   FooterToolbar,
@@ -15,7 +15,8 @@ import {
   batchDeleteFetchPostUsingPost,
   deleteFetchPostUsingPost,
   listFetchPostVoByPageForAdminUsingPost,
-  dataCaptureUsingPost
+  dataCaptureUsingPost, pushFullToEsUsingPost,
+
 } from '@/services/itc-platform/fetchPostController';
 
 const TableList: React.FC = () => {
@@ -39,6 +40,8 @@ const TableList: React.FC = () => {
       hide();
       // 操作成功提示
       message.success('数据抓取成功');
+      // 更新数据表单
+      actionRef.current.reload();
       return true;
     } catch (error: any) {
       hide();
@@ -47,6 +50,32 @@ const TableList: React.FC = () => {
       return false;
     }
   };
+
+
+  /**
+   * 处理文章推送到ES（全量推送）
+   */
+  const handlePushToES = async () => {
+    // 设置加载提示
+    const hide = message.loading('正在请求操作...');
+    try {
+      // 数据抓取操作
+      await pushFullToEsUsingPost();
+      hide();
+      // 操作成功提示
+      message.success('数据同步成功');
+      // 更新数据表单
+      actionRef.current.reload();
+      return true;
+    } catch (error: any) {
+      hide();
+      // 否则提示操作失败+报错信息
+      message.error('数据同步失败，' + error.message);
+      return false;
+    }
+  };
+
+
 
   /**
    * 推送文章数据（推到ES：todo）
@@ -166,8 +195,7 @@ const TableList: React.FC = () => {
         (text) => {
           const jsonObj = JSON.parse(text);
           return jsonObj.userAvatar;
-        }
-      ,
+        },
       hideInSearch: true,
     },
 
@@ -200,6 +228,7 @@ const TableList: React.FC = () => {
                   }
                 </span>
       ),
+      hideInSearch: true
     },
 
 
@@ -256,7 +285,7 @@ const TableList: React.FC = () => {
           status: 'Default',
         },
         1: {
-          text: '待同步',
+          text: '已同步',
           status: 'Processing',
         },
       },
@@ -268,13 +297,15 @@ const TableList: React.FC = () => {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
-      hidden: false
+      hidden: false,
+      hideInSearch: true
     },
     {
       title: '更新时间',
       dataIndex: 'updateTime',
       valueType: 'dateTime',
       hidden: true,
+      hideInSearch: true
     },
 
     // 接口信息管理操作配置定义
@@ -313,6 +344,10 @@ const TableList: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
+        // 分页配置
+        pagination={{
+          pageSize: 10,
+        }}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -323,6 +358,17 @@ const TableList: React.FC = () => {
             }}
           >
             <PlusOutlined/> 抓取文章
+          </Button>,
+
+          <Button
+            type="primary"
+            key="handlePushToES"
+            onClick={() => {
+              // 模拟抓取文章信息
+              handlePushToES();
+            }}
+          >
+            <ApiOutlined/> 同步到ES
           </Button>,
         ]}
         // 原脚手架默认调用API接口 request={rule}；request={listInterfaceInfoByPageUsingPost}直接调用的话无法渲染，因为响应数据交互不匹配
@@ -337,7 +383,7 @@ const TableList: React.FC = () => {
             return {
               data: res?.data.records || [],
               success: true,
-              total: res.total,
+              total: res?.data.total,
             }
           }
         }}

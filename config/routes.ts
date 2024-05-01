@@ -48,6 +48,17 @@ export default [
         ],
       },
 
+      // 内容管理板块
+      {
+        path: '/admin/cms',
+        name: '📣内容管理板块',
+        routes: [
+          // 当前路径配置转发规则
+          {path: '/admin/cms', redirect: '/admin/cms/notification'},
+          {path: '/admin/cms/Notification', name: '公告管理', component: './Admin/Cms/Notification'},
+        ],
+      },
+
       // 聚合搜索板块
       {
         path: '/admin/search',

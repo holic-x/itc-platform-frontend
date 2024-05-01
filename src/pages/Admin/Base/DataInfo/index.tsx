@@ -42,6 +42,8 @@ const handleAdd = async (fields: API.DataInfoAddRequest) => {
         ...fields,
       });
       hide();
+      // 更新表单数据
+      actionRef.current.reload();
       // 操作成功提示
       message.success('新增成功');
       // 操作成功则关闭这个模态框
@@ -367,6 +369,10 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
         search={{
           labelWidth: 120,
         }}
+        // 分页配置
+        pagination={{
+          pageSize: 10,
+        }}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -396,7 +402,7 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
             return  {
               data: res?.data.records || [],
               success: true,
-              total: res.total,
+              total: res?.data.total,
             }
           }
         }}

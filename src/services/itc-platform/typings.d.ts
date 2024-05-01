@@ -47,6 +47,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListNotificationVO_ = {
+    code?: number;
+    data?: NotificationVO[];
+    message?: string;
+  };
+
   type BaseResponseListUserInterfaceInfo_ = {
     code?: number;
     data?: UserInterfaceInfo[];
@@ -62,6 +68,12 @@ declare namespace API {
   type BaseResponseLong_ = {
     code?: number;
     data?: number;
+    message?: string;
+  };
+
+  type BaseResponseNotificationVO_ = {
+    code?: number;
+    data?: NotificationVO;
     message?: string;
   };
 
@@ -98,6 +110,12 @@ declare namespace API {
   type BaseResponsePageInterfaceInfo_ = {
     code?: number;
     data?: PageInterfaceInfo_;
+    message?: string;
+  };
+
+  type BaseResponsePageNotificationVO_ = {
+    code?: number;
+    data?: PageNotificationVO_;
     message?: string;
   };
 
@@ -339,6 +357,7 @@ declare namespace API {
     tags?: string[];
     title?: string;
     userId?: number;
+    userName?: string;
   };
 
   type FetchPostVO = {
@@ -350,6 +369,7 @@ declare namespace API {
     id?: number;
     status?: number;
     tagList?: string[];
+    tags?: string;
     thumbNum?: number;
     title?: string;
     updateTime?: string;
@@ -393,6 +413,11 @@ declare namespace API {
   };
 
   type getInterfaceInfoVOByIdUsingGETParams = {
+    /** id */
+    id?: number;
+  };
+
+  type getNotificationVOByIdUsingGETParams = {
     /** id */
     id?: number;
   };
@@ -458,6 +483,7 @@ declare namespace API {
     requestHeader?: string;
     requestParams?: string;
     responseHeader?: string;
+    responseParams?: string;
     url?: string;
   };
 
@@ -490,6 +516,7 @@ declare namespace API {
     interfaceName?: string;
     interfaceStatus?: string;
     interfaceType?: string;
+    searchText?: string;
     userName?: string;
   };
 
@@ -578,6 +605,57 @@ declare namespace API {
     userRole?: string;
   };
 
+  type NotificationAddRequest = {
+    content?: string;
+    domain?: string;
+    endTime?: string;
+    startTime?: string;
+    status?: number;
+    title?: string;
+  };
+
+  type NotificationQueryRequest = {
+    content?: string;
+    current?: number;
+    domain?: string;
+    endTime?: string;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    startTime?: string;
+    status?: number;
+    title?: string;
+    userId?: string;
+  };
+
+  type NotificationStatusUpdateRequest = {
+    id?: number;
+    operType?: string;
+  };
+
+  type NotificationUpdateRequest = {
+    content?: string;
+    domain?: string;
+    endTime?: string;
+    id?: number;
+    startTime?: string;
+    status?: number;
+    title?: string;
+  };
+
+  type NotificationVO = {
+    content?: string;
+    createTime?: string;
+    domain?: string;
+    endTime?: string;
+    id?: number;
+    startTime?: string;
+    status?: number;
+    title?: string;
+    updateTime?: string;
+    userId?: string;
+  };
+
   type OrderItem = {
     asc?: boolean;
     column?: string;
@@ -643,6 +721,19 @@ declare namespace API {
     orders?: OrderItem[];
     pages?: number;
     records?: InterfaceInfo[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
+  type PageNotificationVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: NotificationVO[];
     searchCount?: boolean;
     size?: number;
     total?: number;
@@ -846,6 +937,7 @@ declare namespace API {
     dataList?: Record<string, any>[];
     pictureList?: Picture[];
     postList?: PostVO[];
+    total?: number;
     userList?: UserVO[];
   };
 
@@ -926,6 +1018,7 @@ declare namespace API {
   type UserAddRequest = {
     userAccount?: string;
     userAvatar?: string;
+    userDescr?: string;
     userName?: string;
     userRole?: string;
   };
@@ -996,13 +1089,16 @@ declare namespace API {
 
   type UserUpdateMyRequest = {
     userAvatar?: string;
+    userDescr?: string;
     userName?: string;
     userProfile?: string;
   };
 
   type UserUpdateRequest = {
     id?: number;
+    userAccount?: string;
     userAvatar?: string;
+    userDescr?: string;
     userName?: string;
     userProfile?: string;
     userRole?: string;

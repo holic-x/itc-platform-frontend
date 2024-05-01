@@ -1,45 +1,60 @@
 import React, { useState } from 'react';
 import { Input, Tabs } from 'antd';
-import { PageContainer } from '@ant-design/pro-layout';
+import { PageContainer, } from '@ant-design/pro-layout';
+import { ProTable } from '@ant-design/pro-table';
+import {searchAllByCondAdaptorUsingPost} from "@/services/itc-platform/searchOptimizeController";
 
+const Test = () => {
 
-const { TabPane } = Tabs;
+  const [params,setParams] = useState({
+    searchText:'小黑子',
+    searchType:'pictures'
+  });
 
-const YourComponent = () => {
-  const [searchValue, setSearchValue] = useState('');
-
-  const onSearchChange = (e) => {
-    setSearchValue(e.target.value);
-  };
-
-  // 根据搜索框的值来定义标签页的内容
-  const tabList = [
+  const columns = [
     {
-      key: 'all',
-      tab: '全部',
+      title: '图片',
+      dataIndex: 'image',
+      render: (dom, record) => (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <img src={record.url} alt={record.title} style={{ width: 50, height: 50, marginRight: 10 }} />
+          <div>{record.title}</div>
+        </div>
+      ),
     },
-    {
-      key: 'search',
-      tab: '搜索结果',
-    },
+    // 其他需要显示的字段...
   ];
 
+
   return (
-    <PageContainer
-      // tabList={tabList}
-      // 根据搜索值显示对应的标签页内容
-    >
-      <Input.Search onChange={onSearchChange} placeholder="搜索" />
-      <Tabs defaultActiveKey={searchValue ? 'search' : 'all'}>
-        <TabPane tab="文章检索" key="all">
-          {!searchValue && <p>显示全部内容</p>}
-        </TabPane>
-        <TabPane tab="图片检索" key="search">
-          {searchValue && <p>显示搜索结果：{searchValue}</p>}
-        </TabPane>
-      </Tabs>
+    <PageContainer>
+      <ProTable
+        columns={columns}
+        request={async (params, sort: Record<string, SortOrder>, filter: Record<string, React.ReactText[] | null>) => {
+          const res = await searchAllByCondAdaptorUsingPost({
+            ...params,
+            searchText:'小黑子',
+            searchType:'pictures'
+          })
+          if (res?.data) {
+            return  {
+              data: res?.data.dataList || [],
+              success: true,
+              total: 10,
+            }
+          }
+        }}
+
+        rowKey="key" // 确保每行数据有唯一的 key
+        pagination={{
+          pageSize: 10, // 每页显示的数据量
+          // 其他分页属性...
+        }}
+        // 其他 ProTable 属性...
+      />
+
     </PageContainer>
   );
 };
 
-export default YourComponent;
+export default Test;

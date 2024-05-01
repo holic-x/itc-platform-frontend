@@ -324,6 +324,10 @@ const Index: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
+        // 分页配置
+        pagination={{
+          pageSize: 10,
+        }}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -348,7 +352,7 @@ const Index: React.FC = () => {
             return {
               data: res?.data.records || [],
               success: true,
-              total: res.total,
+              total: res?.data.total,
             }
           }
         }}

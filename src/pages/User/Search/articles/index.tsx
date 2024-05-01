@@ -186,6 +186,10 @@ const TableList: React.FC = () => {
           labelWidth: 120,
         }}
         */
+        // 分页配置
+        pagination={{
+          pageSize: 10,
+        }}
         toolBarRender={() => [
           // 操作栏定义
         ]}
@@ -218,7 +222,7 @@ const TableList: React.FC = () => {
             return {
               data: res?.data.dataList || [],
               success: true,
-              total: res.dataList,
+              total: res?.data.total,
             }
           }
 

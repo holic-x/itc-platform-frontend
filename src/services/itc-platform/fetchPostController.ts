@@ -55,6 +55,14 @@ export async function listFetchPostVoByPageForAdminUsingPost(
   });
 }
 
+/** pushFullToES POST /api/admin/fetchPost/pushFullToES */
+export async function pushFullToEsUsingPost(options?: { [key: string]: any }) {
+  return request<API.BaseResponseBoolean_>('/api/admin/fetchPost/pushFullToES', {
+    method: 'POST',
+    ...(options || {}),
+  });
+}
+
 /** listFetchPostVOByPageForUser POST /api/fetchPost/list/page */
 export async function listFetchPostVoByPageForUserUsingPost(
   body: API.FetchPostQueryRequest,

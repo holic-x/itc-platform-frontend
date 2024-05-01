@@ -58,6 +58,8 @@ const TableList: React.FC = () => {
         ...fields,
       });
       hide();
+      // 更新表单数据
+      actionRef.current.reload();
       // 如果调用成功会提示'创建成功'
       message.success('创建成功');
       // 创建成功就关闭这个模态框
@@ -251,6 +253,12 @@ const TableList: React.FC = () => {
       hidden: true // 隐藏指定列
     },
     {
+      title: '响应参数',
+      dataIndex: 'responseParams',
+      valueType: 'jsonCode',
+      hidden: true // 隐藏指定列
+    },
+    {
       title: '状态',
       dataIndex: 'status',
       hideInForm: true,
@@ -388,6 +396,10 @@ const TableList: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
+        // 分页配置
+        pagination={{
+          pageSize: 10,
+        }}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -447,7 +459,7 @@ const TableList: React.FC = () => {
             return {
               "data": res?.data.records || [],
               "success": true,
-              "total": res.total,
+              "total": res?.data.total,
             }
           }
         }}
