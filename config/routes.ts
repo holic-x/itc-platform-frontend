@@ -1,4 +1,4 @@
-import { layout } from "@/app";
+import {layout} from "@/app";
 
 export default [
   {
@@ -31,7 +31,8 @@ export default [
     routes: [
       {
         // 当前路径规则转发配置（/admin=》重定向到对应为止）
-        path: '/admin', redirect: '/admin/sub-page'},
+        path: '/admin', redirect: '/admin/sub-page'
+      },
       // { path: '/admin/sub-page', name: '二级管理页', component: './Admin' },
 
       // 基础信息板块
@@ -41,7 +42,14 @@ export default [
         routes: [
           // 当前路径配置转发规则
           {path: '/admin/base', redirect: '/admin/base/userInfo'},
-          {path: '/admin/base/userInfo', name: '用户管理', component: './Admin/Base/UserInfo'},
+          {
+            path: '/admin/base/userManage', name: '用户管理', routes: [
+              // 当前路径配置转发规则
+              {path: '/admin/base/userManage', redirect: '/admin/base/userManage/userInfo'},
+              {path: '/admin/base/userManage/userInfo', name: '用户信息', component: './Admin/Base/UserManage/UserInfo'},
+              {path: '/admin/base/userManage/userSign', name: '签到信息', component: './Admin/Base/UserManage/UserSign'},
+            ]
+          },
           {path: '/admin/base/post', name: '文章管理', component: './Admin/Base/Post'},
           {path: '/admin/base/template', name: '模板管理', component: './Admin/Base/Template'},
           {path: '/admin/base/dataInfo', name: '数据管理', component: './Admin/Base/DataInfo'},
@@ -78,13 +86,17 @@ export default [
           // 当前路径配置转发规则
           {path: '/admin/api', redirect: '/admin/api/interfaceInfo'},
           {path: '/admin/api/interfaceInfo', name: '接口信息管理', component: './Admin/Api/InterfaceInfo'},
-          {path: '/admin/api/interfaceInfoStatistic', name: '接口数据统计', component: './Admin/Api/InterfaceInfoStatistic'},
+          {
+            path: '/admin/api/interfaceInfoStatistic',
+            name: '接口数据统计',
+            component: './Admin/Api/InterfaceInfoStatistic'
+          },
         ],
       },
 
       // BI智能板块
       {
-        path: '/admin/bi',        name: '📊BI智能板块',
+        path: '/admin/bi', name: '📊BI智能板块',
         routes: [
           // 当前路径配置转发规则
           {path: '/admin/bi', redirect: '/admin/bi/chart'},
@@ -111,7 +123,6 @@ export default [
   // {name: '查询表格', icon: 'table', path: '/mytable', component: './TableList'},
   {path: '/', redirect: '/welcome'},
   {path: '*', layout: false, component: './404'},
-
 
 
   // --------------- 用户主页可访问模块定义 ----------------
@@ -224,7 +235,7 @@ export default [
     ],
   },
 
-  {path: '/test',name:'测试', component: './User/Test'},
+  {path: '/test', name: '测试', component: './User/Test'},
 
 
 ];

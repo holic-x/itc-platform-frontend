@@ -155,6 +155,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageUserSignVO_ = {
+    code?: number;
+    data?: PageUserSignVO_;
+    message?: string;
+  };
+
   type BaseResponsePageUserVO_ = {
     code?: number;
     data?: PageUserVO_;
@@ -194,6 +200,12 @@ declare namespace API {
   type BaseResponseUserInterfaceInfo_ = {
     code?: number;
     data?: UserInterfaceInfo;
+    message?: string;
+  };
+
+  type BaseResponseUserSignVO_ = {
+    code?: number;
+    data?: UserSignVO;
     message?: string;
   };
 
@@ -438,6 +450,11 @@ declare namespace API {
   };
 
   type getUserInterfaceInfoByIdUsingGETParams = {
+    /** id */
+    id?: number;
+  };
+
+  type getUserSignVOByIdUsingGETParams = {
     /** id */
     id?: number;
   };
@@ -817,6 +834,19 @@ declare namespace API {
     total?: number;
   };
 
+  type PageUserSignVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: UserSignVO[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
   type PageUserVO_ = {
     countId?: string;
     current?: number;
@@ -1079,6 +1109,25 @@ declare namespace API {
     userAccount?: string;
     userName?: string;
     userPassword?: string;
+  };
+
+  type UserSignQueryRequest = {
+    current?: number;
+    pageSize?: number;
+    signChannel?: string;
+    sortField?: string;
+    sortOrder?: string;
+    title?: string;
+  };
+
+  type UserSignVO = {
+    id?: number;
+    score?: number;
+    signChannel?: string;
+    signInTime?: string;
+    title?: string;
+    uid?: number;
+    uname?: string;
   };
 
   type UserStatusUpdateRequest = {

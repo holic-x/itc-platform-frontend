@@ -1,15 +1,23 @@
-import React ,{ useEffect,useState }from 'react';
-import {PageContainer,GridContent} from '@ant-design/pro-components';
-import { ClusterOutlined, ContactsOutlined, HomeOutlined, PlusOutlined ,CopyOutlined,ApiOutlined,PayCircleOutlined} from '@ant-design/icons';
+import React, {useEffect, useState} from 'react';
+import {PageContainer, GridContent} from '@ant-design/pro-components';
+import {
+  ClusterOutlined,
+  ContactsOutlined,
+  HomeOutlined,
+  PlusOutlined,
+  CopyOutlined,
+  ApiOutlined,
+  PayCircleOutlined
+} from '@ant-design/icons';
 
-import { Avatar, Card, Col, Divider, Input, InputRef, Row, Tag ,Button,Spin} from 'antd';
+
+import {Avatar, Card, Col, Divider, Input, InputRef, Row, Tag, message,Button, Spin} from 'antd';
 import {useModel} from "@@/exports";
-
 
 
 // 引入自定义样式
 import useStyles from './Center.style';
-import {getUserVoMoreByCurrentLoginUserUsingGet} from "@/services/itc-platform/accountController";
+import {getUserVoMoreByCurrentLoginUserUsingGet, userSignInUsingPost} from "@/services/itc-platform/accountController";
 
 // 引入自定义组件（复制按钮）
 import CopyButton from "@/components/Common/CopyButton";
@@ -18,50 +26,55 @@ import DownloadButton from "@/components/Common/DownloadButton";
 const Index: React.FC = () => {
 
   // 定义自定义样式
-  const { styles } = useStyles();
+  const {styles} = useStyles();
 
   // 获取登录用户信息
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
+  const {initialState} = useModel('@@initialState');
+  const {currentUser} = initialState || {};
 
   // 用户详细信息
-  const [userMoreInfo,setUserMoreInfo] = useState();
+  const [userMoreInfo, setUserMoreInfo] = useState();
 
 
   // 定义方法获取用户信息
   const fetchUserInfo = async () => {
-    getUserVoMoreByCurrentLoginUserUsingGet().then(res=>{
+    getUserVoMoreByCurrentLoginUserUsingGet().then(res => {
       setUserMoreInfo(res.data);
-      console.error('center响应数据',res)
+      console.error('center响应数据', res)
     });
   }
 
   // 调用接口获取用户详情信息(空数组表示仅在组件挂载时调用一次)
-  useEffect(()=>{
+  useEffect(() => {
     // 调用方法触发用户信息获取
     fetchUserInfo();
-  },[])
+  }, [])
 
 
   // ---------------- start 操作方法定义 --------------
   // 重新生成AK/SK
-  const handleRegenerate = () =>{
-      alert('模拟调用接口重新生成AK、SK');
-      // 响应成功，重新请求刷新页面数据
-      fetchUserInfo();
-  }
-
-  // 处理每日签到
-  const handleDailySignIn = () => {
-    alert('模拟调用接口进行每日签到领取积分');
-    alert('🚀🚀🚀签到成功，恭喜获取💰10积分，请再接再厉');
+  const handleRegenerate = () => {
+    alert('模拟调用接口重新生成AK、SK');
     // 响应成功，重新请求刷新页面数据
     fetchUserInfo();
   }
 
+  // 处理每日签到
+  const handleDailySignIn = async () => {
+    try {
+      // alert('模拟调用接口进行每日签到领取积分');
+      await userSignInUsingPost().then(res => {
+        alert('🚀🚀🚀签到成功，恭喜获取💰10积分，请再接再厉');
+      });
+      // 响应成功，重新请求刷新页面数据
+      fetchUserInfo();
+    } catch (error: any) {
+      message.error('签到失败(日内不能重复签到)：' + error.message);
+      return false;
+    }
+  }
+
   // ---------------- end 操作方法定义 --------------
-
-
 
 
   // 自定义loading组件
@@ -120,8 +133,8 @@ const Index: React.FC = () => {
   const renderDevelop = ({accessKey, secretKey, score}: Partial<API.UserVO>) => {
     return (
       <div className={styles.detail}>
-        <Button type="link" onClick={handleRegenerate}  >💊重新生成AK/SK💊</Button>
-        <Button type="link" onClick={handleDailySignIn}  >🚀每日签到领积分🚀</Button>
+        <Button type="link" onClick={handleRegenerate}>💊重新生成AK/SK💊</Button>
+        <Button type="link" onClick={handleDailySignIn}>🚀每日签到领积分🚀</Button>
         <p>
           <ApiOutlined
             style={{
@@ -130,7 +143,7 @@ const Index: React.FC = () => {
           />
           AccessKey：{accessKey}
           {/*引用自定义组件（复制按钮）完成复制操作*/}
-          <CopyButton text={accessKey} />
+          <CopyButton text={accessKey}/>
         </p>
         <p>
           <ApiOutlined
@@ -139,7 +152,7 @@ const Index: React.FC = () => {
             }}
           />
           SecretKey：{secretKey}
-          <CopyButton text={secretKey} />
+          <CopyButton text={secretKey}/>
         </p>
         <p>
           <PayCircleOutlined
@@ -166,7 +179,9 @@ const Index: React.FC = () => {
           />
           API接口调用平台：SDK下载 =》
           <DownloadButton downloadUrl='xxx'/>
-          <Button onClick={()=>{window.open("https://baidu.com","_blank")}} type="dashed" >查看开发者文档</Button>
+          <Button onClick={() => {
+            window.open("https://baidu.com", "_blank")
+          }} type="dashed">查看开发者文档</Button>
         </p>
 
         <p>
@@ -177,7 +192,9 @@ const Index: React.FC = () => {
           />
           BI智能图表分析：SDK下载 =》
           <DownloadButton downloadUrl='xxx'/>
-          <Button onClick={()=>{window.open("https://baidu.com","_blank")}} type="dashed" >查看开发者文档</Button>
+          <Button onClick={() => {
+            window.open("https://baidu.com", "_blank")
+          }} type="dashed">查看开发者文档</Button>
         </p>
 
         <p>
@@ -191,7 +208,7 @@ const Index: React.FC = () => {
   return (
     <PageContainer>
       <GridContent>
-        <Row >
+        <Row>
           <Col>
             <Card
               bordered={false}
@@ -199,63 +216,63 @@ const Index: React.FC = () => {
                 marginBottom: 24,
               }}
             >
-                { currentUser && (
-                  <div>
-                    <div className={styles.avatarHolder}>
-                      {/*<img alt="" src={currentUser.userAvatar} />*/}
-                      <img alt="" src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"/>
-                      <div className={styles.name}>{currentUser.userName}</div>
-                      <div>{currentUser?.userDescr}</div>
-                    </div>
-
-                    {/*渲染用户信息展示用户详情*/}
-                    {renderUserInfo(currentUser)}
-
-                    {/*分割线*/}
-                    <Divider dashed/>
-
-                    {/*渲染用户信息展示用户详情*/}
-                    <div className={styles.avatarHolder}>
-                      <div className={styles.name}>开发者区域</div>
-                      <div>API接口调用凭证信息</div>
-                    </div>
-                    {renderDevelop(userMoreInfo)}
-
-
-                    {/*渲染开发者SDK下载区域*/}
-                    <div className={styles.avatarHolder}>
-                      <div className={styles.name}>SDK下载</div>
-                      <div>开发者SDK：让程序开发更灵活（API接口调用、BI报表分析....）</div>
-                    </div>
-                    {renderDevelopSDK()}
-
-
-                    {/*<TagList tags={currentUser.tags || []}/>*/}
-                    {/*<Divider*/}
-                    {/*  style={{*/}
-                    {/*    marginTop: 16,*/}
-                    {/*  }}*/}
-                    {/*  dashed*/}
-                    {/*/>*/}
-
-                    {/*<div className={styles.team}>*/}
-                    {/*  <div className={styles.teamTitle}>团队</div>*/}
-                    {/*  <Row gutter={36}>*/}
-                    {/*    {currentUser.notice &&*/}
-                    {/*      currentUser.notice.map((item) => (*/}
-                    {/*        <Col key={item.id} lg={24} xl={12}>*/}
-                    {/*          <a href={item.href}>*/}
-                    {/*            <Avatar size="small" src={item.logo}/>*/}
-                    {/*            {item.member}*/}
-                    {/*          </a>*/}
-                    {/*        </Col>*/}
-                    {/*      ))}*/}
-                    {/*  </Row>*/}
-                    {/*</div>*/}
-
-
+              {currentUser && (
+                <div>
+                  <div className={styles.avatarHolder}>
+                    {/*<img alt="" src={currentUser.userAvatar} />*/}
+                    <img alt="" src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"/>
+                    <div className={styles.name}>{currentUser.userName}</div>
+                    <div>{currentUser?.userDescr}</div>
                   </div>
-                )}
+
+                  {/*渲染用户信息展示用户详情*/}
+                  {renderUserInfo(currentUser)}
+
+                  {/*分割线*/}
+                  <Divider dashed/>
+
+                  {/*渲染用户信息展示用户详情*/}
+                  <div className={styles.avatarHolder}>
+                    <div className={styles.name}>开发者区域</div>
+                    <div>API接口调用凭证信息</div>
+                  </div>
+                  {renderDevelop(userMoreInfo)}
+
+
+                  {/*渲染开发者SDK下载区域*/}
+                  <div className={styles.avatarHolder}>
+                    <div className={styles.name}>SDK下载</div>
+                    <div>开发者SDK：让程序开发更灵活（API接口调用、BI报表分析....）</div>
+                  </div>
+                  {renderDevelopSDK()}
+
+
+                  {/*<TagList tags={currentUser.tags || []}/>*/}
+                  {/*<Divider*/}
+                  {/*  style={{*/}
+                  {/*    marginTop: 16,*/}
+                  {/*  }}*/}
+                  {/*  dashed*/}
+                  {/*/>*/}
+
+                  {/*<div className={styles.team}>*/}
+                  {/*  <div className={styles.teamTitle}>团队</div>*/}
+                  {/*  <Row gutter={36}>*/}
+                  {/*    {currentUser.notice &&*/}
+                  {/*      currentUser.notice.map((item) => (*/}
+                  {/*        <Col key={item.id} lg={24} xl={12}>*/}
+                  {/*          <a href={item.href}>*/}
+                  {/*            <Avatar size="small" src={item.logo}/>*/}
+                  {/*            {item.member}*/}
+                  {/*          </a>*/}
+                  {/*        </Col>*/}
+                  {/*      ))}*/}
+                  {/*  </Row>*/}
+                  {/*</div>*/}
+
+
+                </div>
+              )}
             </Card>
           </Col>
 

@@ -20,6 +20,7 @@ import * as searchOptimizeController from './searchOptimizeController';
 import * as templateController from './templateController';
 import * as userController from './userController';
 import * as userInterfaceInfoController from './userInterfaceInfoController';
+import * as userSignController from './userSignController';
 import * as wxMpController from './wxMpController';
 export default {
   wxMpController,
@@ -32,6 +33,7 @@ export default {
   postController,
   postFavourController,
   postThumbController,
+  userSignController,
   analysicController,
   chartController,
   apiSquareController,
