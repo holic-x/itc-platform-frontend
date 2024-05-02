@@ -2,9 +2,9 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** addPost POST /api/post/add */
+/** addPost POST /api/admin/post/add */
 export async function addPostUsingPost(body: API.PostAddRequest, options?: { [key: string]: any }) {
-  return request<API.BaseResponseLong_>('/api/post/add', {
+  return request<API.BaseResponseLong_>('/api/admin/post/add', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -14,12 +14,12 @@ export async function addPostUsingPost(body: API.PostAddRequest, options?: { [ke
   });
 }
 
-/** batchDeletePost POST /api/post/batchDeletePost */
+/** batchDeletePost POST /api/admin/post/batchDeletePost */
 export async function batchDeletePostUsingPost(
   body: API.BatchDeleteRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean_>('/api/post/batchDeletePost', {
+  return request<API.BaseResponseBoolean_>('/api/admin/post/batchDeletePost', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -29,12 +29,12 @@ export async function batchDeletePostUsingPost(
   });
 }
 
-/** deletePost POST /api/post/delete */
+/** deletePost POST /api/admin/post/delete */
 export async function deletePostUsingPost(
   body: API.DeleteRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean_>('/api/post/delete', {
+  return request<API.BaseResponseBoolean_>('/api/admin/post/delete', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -44,12 +44,12 @@ export async function deletePostUsingPost(
   });
 }
 
-/** editPost POST /api/post/edit */
+/** editPost POST /api/admin/post/edit */
 export async function editPostUsingPost(
   body: API.PostEditRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean_>('/api/post/edit', {
+  return request<API.BaseResponseBoolean_>('/api/admin/post/edit', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -59,13 +59,13 @@ export async function editPostUsingPost(
   });
 }
 
-/** getPostVOById GET /api/post/get/vo */
+/** getPostVOById GET /api/admin/post/get/vo */
 export async function getPostVoByIdUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getPostVOByIdUsingGETParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePostVO_>('/api/post/get/vo', {
+  return request<API.BaseResponsePostVO_>('/api/admin/post/get/vo', {
     method: 'GET',
     params: {
       ...params,
@@ -74,12 +74,12 @@ export async function getPostVoByIdUsingGet(
   });
 }
 
-/** handlePostStatus POST /api/post/handlePostStatus */
+/** handlePostStatus POST /api/admin/post/handlePostStatus */
 export async function handlePostStatusUsingPost(
   body: API.PostStatusUpdateRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean_>('/api/post/handlePostStatus', {
+  return request<API.BaseResponseBoolean_>('/api/admin/post/handlePostStatus', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -89,12 +89,12 @@ export async function handlePostStatusUsingPost(
   });
 }
 
-/** listPostByPage POST /api/post/list/page */
+/** listPostByPage POST /api/admin/post/list/page */
 export async function listPostByPageUsingPost(
   body: API.PostQueryRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePagePost_>('/api/post/list/page', {
+  return request<API.BaseResponsePagePost_>('/api/admin/post/list/page', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -104,12 +104,12 @@ export async function listPostByPageUsingPost(
   });
 }
 
-/** listPostVOByPage POST /api/post/list/page/vo */
+/** listPostVOByPage POST /api/admin/post/list/page/vo */
 export async function listPostVoByPageUsingPost(
   body: API.PostQueryRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePagePostVO_>('/api/post/list/page/vo', {
+  return request<API.BaseResponsePagePostVO_>('/api/admin/post/list/page/vo', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -119,12 +119,12 @@ export async function listPostVoByPageUsingPost(
   });
 }
 
-/** listMyPostVOByPage POST /api/post/my/list/page/vo */
+/** listMyPostVOByPage POST /api/admin/post/my/list/page/vo */
 export async function listMyPostVoByPageUsingPost(
   body: API.PostQueryRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePagePostVO_>('/api/post/my/list/page/vo', {
+  return request<API.BaseResponsePagePostVO_>('/api/admin/post/my/list/page/vo', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -134,12 +134,12 @@ export async function listMyPostVoByPageUsingPost(
   });
 }
 
-/** searchPostVOByPage POST /api/post/search/page/vo */
+/** searchPostVOByPage POST /api/admin/post/search/page/vo */
 export async function searchPostVoByPageUsingPost(
   body: API.PostQueryRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePagePostVO_>('/api/post/search/page/vo', {
+  return request<API.BaseResponsePagePostVO_>('/api/admin/post/search/page/vo', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -149,12 +149,12 @@ export async function searchPostVoByPageUsingPost(
   });
 }
 
-/** updatePost POST /api/post/update */
+/** updatePost POST /api/admin/post/update */
 export async function updatePostUsingPost(
   body: API.PostUpdateRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseBoolean_>('/api/post/update', {
+  return request<API.BaseResponseBoolean_>('/api/admin/post/update', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

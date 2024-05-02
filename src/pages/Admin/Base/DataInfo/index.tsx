@@ -7,11 +7,11 @@ import {
   ProTable
 } from '@ant-design/pro-components';
 import '@umijs/max';
-import { Button, Drawer, message } from 'antd';
+import { Button, Drawer, message,Tag ,Select} from 'antd';
 import React, { useRef, useState } from 'react';
 
-// 引入用户信息管理相关API
-import { addUserUsingPost, batchDeleteUserUsingPost, deleteUserUsingPost, handleUserStatusUsingPost, listUserVoByPageUsingPost, updateUserUsingPost } from '@/services/itc-platform/userController';
+// 引入数据信息管理相关API
+import { addDataInfoUsingPost, batchDeleteDataInfoUsingPost, deleteDataInfoUsingPost, handleDataInfoStatusUsingPost, listByPageUsingPost, listDataInfoVoByPageUsingPost, updateDataInfoUsingPost } from '@/services/itc-platform/dataInfoController';
 
 // 接入自定义模态框或组件（新增、修改）
 import CreateModal from './components/CreateModal';
@@ -27,21 +27,23 @@ const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   // 单选、多选
-  const [currentRow, setCurrentRow] = useState<API.UserVO>();
-  const [selectedRowsState, setSelectedRows] = useState<API.UserVO[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.DataInfoVO>();
+  const [selectedRowsState, setSelectedRows] = useState<API.DataInfoVO[]>([]);
 
 /**
  * 添加节点
  */
-const handleAdd = async (fields: API.UserAddRequest) => {
+const handleAdd = async (fields: API.DataInfoAddRequest) => {
   // 设置加载提示
   const hide = message.loading('正在请求操作...');
     try {
       // 添加操作
-      await addUserUsingPost({
+      await addDataInfoUsingPost({
         ...fields,
       });
       hide();
+      // 更新表单数据
+      actionRef.current.reload();
       // 操作成功提示
       message.success('新增成功');
       // 操作成功则关闭这个模态框
@@ -58,7 +60,7 @@ const handleAdd = async (fields: API.UserAddRequest) => {
 /**
  * 更新节点
  */
-const handleUpdate = async (fields: API.UserUpdateRequest) => {
+const handleUpdate = async (fields: API.DataInfoUpdateRequest) => {
   // 如果没有选中行直接返回
   if(!currentRow){
     return ;
@@ -66,8 +68,10 @@ const handleUpdate = async (fields: API.UserUpdateRequest) => {
   const hide = message.loading('正在请求操作...');
   try {
     // 调用后台接口执行修改操作
-    await updateUserUsingPost({
+    await updateDataInfoUsingPost({
       id: currentRow.id,
+      // tags: fields.tagList,
+      // tags: currentRow.tagList,
       ...fields,
     });
     hide();
@@ -90,7 +94,7 @@ const handleRemove = async (record: API.DeleteRequest) => {
   const hide = message.loading('正在请求操作...');
   if (!record) return true;
   try {
-    await deleteUserUsingPost({
+    await deleteDataInfoUsingPost({
       // 根据id删除数据
       id: record.id
     });
@@ -109,55 +113,55 @@ const handleRemove = async (record: API.DeleteRequest) => {
 };
 
 /**
- * 激活用户
+ * 发布数据
  */
-const handleActive = async (record: API.UserStatusUpdateRequest) => {
+const handlePublish = async (record: API.DataInfoStatusUpdateRequest) => {
   // 设置加载中的提示为'正在处理'
   const hide = message.loading('正在处理');
   if (!record) return true;
   try {
      // 调用接口
-    await handleUserStatusUsingPost({
+    await handleDataInfoStatusUsingPost({
       id: record.id,
-      operType: 'active'
+      operType: 'publish'
     });
     hide();
     // 如果调用成功会提示'处理成功'
-    message.success('激活成功');
+    message.success('发布成功');
     // 处理成功自动刷新表单
     actionRef.current?.reload();
     return true;
   } catch (error: any) {
     hide();
      // 否则提示操作失败+报错信息
-    message.error('激活失败，' + error.message);
+    message.error('发布失败，' + error.message);
     return false;
   }
 };
 
 /**
- * 禁用用户
+ * 暂存（下架）
  */
-const handleForbid = async (record: API.UserStatusUpdateRequest) => {
+const handleDraft = async (record: API.DataInfoStatusUpdateRequest) => {
   // 设置加载中的提示为'正在处理'
   const hide = message.loading('正在处理');
   if (!record) return true;
   try {
      // 调用接口
-    await handleUserStatusUsingPost({
+    await handleDataInfoStatusUsingPost({
       id: record.id,
-      operType: 'forbid'
+      operType: 'draft'
     });
     hide();
     // 如果调用成功会提示'处理成功'
-    message.success('禁用成功');
+    message.success('下架成功');
     // 处理成功自动刷新表单
     actionRef.current?.reload();
     return true;
   } catch (error: any) {
     hide();
      // 否则提示操作失败+报错信息
-    message.error('禁用失败，' + error.message);
+    message.error('下架失败，' + error.message);
     return false;
   }
 };
@@ -173,7 +177,7 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
   console.log('当前选中行数据：',selectedRows);
   // 执行删除操作
   try {
-    await batchDeleteUserUsingPost({
+    await batchDeleteDataInfoUsingPost({
       // 根据id删除数据（将多选的id行封装为列表数据）
       idList: selectedRows.map((row) => row.id),
     });
@@ -193,9 +197,9 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
 };
 
   // 列表信息定义
-  const columns: ProColumns<API.UserVO>[] = [
+  const columns: ProColumns<API.DataInfoVO>[] = [
     {
-      title: '用户id',
+      title: 'id',
       dataIndex: 'id',
       valueType:'index',
       // tip: 'The rule name is the unique key',
@@ -213,60 +217,84 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
       },
     },
     {
-      title: '用户账号',
-      dataIndex: 'userAccount',
+      title: '数据类型',
+      dataIndex: 'dataType',
       valueType: 'text',
-      formItemProps:{
-        rules:[{
-          required:true, // 设置必填项
-          message:"请输入", // 设置提示信息
-        }]
-      }
-    },
-    {
-      title: '用户名',
-      dataIndex: 'userName',
-      valueType: 'text',
-      formItemProps:{
-        rules:[{
-          required:true, // 设置必填项
-          message:"请输入", // 设置提示信息
-        }]
-      }
-    },
-    {
-      title: '头像',
-      dataIndex: 'userAvatar',
-      // valueType: 'text',
-      valueType: 'image', // 图片格式
-      formItemProps:{},
-      hideInSearch: true, // 在搜索组件中隐藏
-    },
-    // 下拉框（用户角色：user、admin）
-    {
-      title: '用户角色',
-      dataIndex: 'userRole',
-      valueType: 'text',
-      formItemProps:{},
-      valueEnum: {
-        'user': {
-          text: '普通用户',
-        },
-        'admin': {
-          text: '管理员',
-        },
+      // 渲染表单项
+      renderFormItem: () => {
+        return (
+          <Select
+            // onChange={() => onSelectChange(row)}
+            // onClick={() => showSalespersonModal(row)}
+            options={[{ label: '类型1', value: '1' },{ label: '类型2', value: '2' },{ label: '类型3', value: '3' },{ label: '类型4', value: '4' }]}
+          />
+        );
       },
+      formItemProps:{
+        rules:[{
+          required:true, // 设置必填项
+          message:"请输入", // 设置提示信息
+        }]
+      },
+      // renderText: (val) => `${val}`  ,
+      render: (val) => (
+        <Tag color="blue" key={val}>
+          {val}
+        </Tag>
+      )
     },
     {
-      title: '用户状态',
-      dataIndex: 'userStatus',
+      title: '数据标题',
+      dataIndex: 'dataName',
+      valueType: 'text',
+      formItemProps:{
+        rules:[{
+          required:true, // 设置必填项
+          message:"请输入", // 设置提示信息
+        }]
+      }
+    },
+    {
+      title: '数据内容',
+      dataIndex: 'dataContent',
+      valueType: 'text',
+      formItemProps:{
+        rules:[{
+          required:true, // 设置必填项
+          message:"请输入", // 设置提示信息
+        }]
+      }
+    },
+
+    {
+      title: '创建者',
+      // dataIndex: 'userId',
+      dataIndex: 'creater',
+      renderText: (val) => `${val.userName}` ,
+      valueType: 'text',
+      hideInForm: true,
+      hideInSearch: true
+    },
+    {
+      title: '修改者',
+      // dataIndex: 'userId',
+      dataIndex: 'updater',
+      renderText: (val) => `${val.userName}` ,
+      valueType: 'text',
+      hideInForm: true,
+      hideInSearch: true
+    },
+
+    {
+      title: '数据状态',
+      dataIndex: 'status',
       valueEnum: {
         0: {
-          text: '禁用',
+          text: '暂存',
           status: 'Default',
         },
         1: {
-          text: '开启',
+          text: '发布',
           status: 'Processing',
         },
       },
@@ -303,20 +331,20 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
           修改
         </a>,
 
-        record.userStatus===0?
-        <a key="active"
+        record.status===0?
+        <a key="publish"
            onClick={()=>{
-            handleActive(record);
+            handlePublish(record);
            }}>
-          激活
+          发布
         </a>:null,
 
-        record.userStatus===1?
-        <a key="forbid"
+        record.status===1?
+        <a key="draft"
            onClick={()=>{
-            handleForbid(record);
+            handleDraft(record);
            }}>
-          禁用
+          回收
         </a>:null,
 
         <a key="delete"
@@ -334,12 +362,16 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
   // ------ start 组件定义 ------------
   return (
     <PageContainer>
-      <ProTable<API.UserVO, API.PageParams>
+      <ProTable<API.DataInfoVO, API.PageParams>
         headerTitle={'数据信息'}
         actionRef={actionRef}
         rowKey="id"
         search={{
           labelWidth: 120,
+        }}
+        // 分页配置
+        pagination={{
+          pageSize: 10,
         }}
         toolBarRender={() => [
           <Button
@@ -356,14 +388,21 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
 
         // 根据request规则，重新编写请求和响应处理
         request={async (params, sort: Record<string, SortOrder>, filter: Record<string, React.ReactText[] | null>) => {
-          const res = await listUserVoByPageUsingPost({
+          // 方式1：queryWrapper封装
+          // const res = await listDataInfoVoByPageUsingPost({
+          //   ...params
+          // })
+
+          // 方式2：自定义SQL关联
+          const res = await listByPageUsingPost({
             ...params
           })
+
           if (res?.data) {
             return  {
               data: res?.data.records || [],
               success: true,
-              total: res.total,
+              total: res?.data.total,
             }
           }
         }}
@@ -380,25 +419,7 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
       {
         // 如果多选选择，则显示操作栏
         selectedRowsState?.length > 0 && (
-        <FooterToolbar
-          extra={
-            <div>
-              已选择{' '}
-              <a
-                style={{
-                  fontWeight: 600,
-                }}
-              >
-                {selectedRowsState.length}
-              </a>{' '}
-              项 &nbsp;&nbsp;
-              <span>
-                {/* 共 {selectedRowsState.reduce((pre, item) => pre + item.callNo!, 0)} 万 */}
-                共 {selectedRowsState.length} 项
-              </span>
-            </div>
-          }
-        >
+        <FooterToolbar>
           <Button
             onClick={async () => {
               // 批量操作
@@ -437,7 +458,7 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
         values={currentRow || {}}
       />
 
-      {/* 定义抽屉式弹窗：查看用户信息详情 */}
+      {/* 定义抽屉式弹窗：查看数据信息详情 */}
       <Drawer
         width={600}
         open={showDetail}
@@ -447,17 +468,17 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
         }}
         closable={false}
       >
-        {currentRow?.userAccount && (
-          <ProDescriptions<API.UserVO>
-            column={2}
-            title={currentRow?.userAccount}
+        {currentRow?.id && (
+          <ProDescriptions<API.DataInfoVO>
+            column={1}
+            title={currentRow?.dataName}
             request={async () => ({
               data: currentRow || {},
             })}
             params={{
               id: currentRow?.id,
             }}
-            columns={columns as ProDescriptionsItemProps<API.UserVO>[]}
+            columns={columns as ProDescriptionsItemProps<API.DataInfoVO>[]}
           />
         )}
       </Drawer>

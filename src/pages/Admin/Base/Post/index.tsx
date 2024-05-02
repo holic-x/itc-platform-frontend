@@ -10,8 +10,8 @@ import '@umijs/max';
 import { Button, Drawer, message,Tag ,Select} from 'antd';
 import React, { useRef, useState } from 'react';
 
-// 引入模板信息管理相关API
-import { addTemplateUsingPost, batchDeleteTemplateUsingPost, deleteTemplateUsingPost, handleTemplateStatusUsingPost, listTemplateVoByPageUsingPost, updateTemplateUsingPost } from '@/services/itc-platform/templateController';
+// 引入文章信息管理相关API
+import { addPostUsingPost, batchDeletePostUsingPost, deletePostUsingPost, handlePostStatusUsingPost, listPostVoByPageUsingPost, updatePostUsingPost } from '@/services/itc-platform/postController';
 
 // 接入自定义模态框或组件（新增、修改）
 import CreateModal from './components/CreateModal';
@@ -27,21 +27,24 @@ const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   // 单选、多选
-  const [currentRow, setCurrentRow] = useState<API.TemplateVO>();
-  const [selectedRowsState, setSelectedRows] = useState<API.TemplateVO[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.PostVO>();
+  const [selectedRowsState, setSelectedRows] = useState<API.PostVO[]>([]);
 
 /**
  * 添加节点
  */
-const handleAdd = async (fields: API.TemplateAddRequest) => {
+const handleAdd = async (fields: API.PostAddRequest) => {
   // 设置加载提示
   const hide = message.loading('正在请求操作...');
     try {
       // 添加操作
-      await addTemplateUsingPost({
+      await addPostUsingPost({
+        tags: fields.tagList,
         ...fields,
       });
       hide();
+      // 更新表单数据
+      actionRef.current.reload();
       // 操作成功提示
       message.success('新增成功');
       // 操作成功则关闭这个模态框
@@ -58,7 +61,7 @@ const handleAdd = async (fields: API.TemplateAddRequest) => {
 /**
  * 更新节点
  */
-const handleUpdate = async (fields: API.TemplateUpdateRequest) => {
+const handleUpdate = async (fields: API.PostUpdateRequest) => {
   // 如果没有选中行直接返回
   if(!currentRow){
     return ;
@@ -66,7 +69,7 @@ const handleUpdate = async (fields: API.TemplateUpdateRequest) => {
   const hide = message.loading('正在请求操作...');
   try {
     // 调用后台接口执行修改操作
-    await updateTemplateUsingPost({
+    await updatePostUsingPost({
       id: currentRow.id,
       // tags: fields.tagList,
       // tags: currentRow.tagList,
@@ -92,7 +95,7 @@ const handleRemove = async (record: API.DeleteRequest) => {
   const hide = message.loading('正在请求操作...');
   if (!record) return true;
   try {
-    await deleteTemplateUsingPost({
+    await deletePostUsingPost({
       // 根据id删除数据
       id: record.id
     });
@@ -111,15 +114,15 @@ const handleRemove = async (record: API.DeleteRequest) => {
 };
 
 /**
- * 发布模板
+ * 发布文章
  */
-const handlePublish = async (record: API.TemplateStatusUpdateRequest) => {
+const handlePublish = async (record: API.PostStatusUpdateRequest) => {
   // 设置加载中的提示为'正在处理'
   const hide = message.loading('正在处理');
   if (!record) return true;
   try {
      // 调用接口
-    await handleTemplateStatusUsingPost({
+    await handlePostStatusUsingPost({
       id: record.id,
       operType: 'publish'
     });
@@ -140,13 +143,13 @@ const handlePublish = async (record: API.TemplateStatusUpdateRequest) => {
 /**
  * 暂存（下架）
  */
-const handleDraft = async (record: API.TemplateStatusUpdateRequest) => {
+const handleDraft = async (record: API.PostStatusUpdateRequest) => {
   // 设置加载中的提示为'正在处理'
   const hide = message.loading('正在处理');
   if (!record) return true;
   try {
      // 调用接口
-    await handleTemplateStatusUsingPost({
+    await handlePostStatusUsingPost({
       id: record.id,
       operType: 'draft'
     });
@@ -175,7 +178,7 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
   console.log('当前选中行数据：',selectedRows);
   // 执行删除操作
   try {
-    await batchDeleteTemplateUsingPost({
+    await batchDeletePostUsingPost({
       // 根据id删除数据（将多选的id行封装为列表数据）
       idList: selectedRows.map((row) => row.id),
     });
@@ -195,7 +198,7 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
 };
 
   // 列表信息定义
-  const columns: ProColumns<API.TemplateVO>[] = [
+  const columns: ProColumns<API.PostVO>[] = [
     {
       title: 'id',
       dataIndex: 'id',
@@ -215,8 +218,8 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
       },
     },
     {
-      title: '模板标题',
-      dataIndex: 'templateName',
+      title: '文章标题',
+      dataIndex: 'title',
       valueType: 'text',
       formItemProps:{
         rules:[{
@@ -226,38 +229,68 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
       }
     },
     {
-      title: '模板内容',
-      dataIndex: 'templateContent',
+      title: '文章内容',
+      dataIndex: 'content',
       valueType: 'text',
       formItemProps:{
         rules:[{
           required:true, // 设置必填项
           message:"请输入", // 设置提示信息
         }]
-      }
+      },
     },
-
+    {
+      title: '标签列表',
+      dataIndex: 'tagList',
+      valueType: 'select', // 列表形式["java","php","ant design pro"]
+      // 渲染表单项
+      renderFormItem: () => {
+        return (
+          <Select
+            mode={'multiple'}
+            // onChange={() => onSelectChange(row)}
+            // onClick={() => showSalespersonModal(row)}
+            options={[{ label: 'java', value: 'java' },{ label: 'php', value: 'php' },{ label: 'python', value: 'python' },{ label: 'ant design pro', value: 'ant design pro' }]}
+          />
+        );
+      },
+      // 渲染文本
+      render: (_, record) => (
+        <span>
+          {record.tagList.map((name) => (
+            <Tag color="blue" key={name}>
+              {name}
+            </Tag>
+          ))}
+        </span>
+      ),
+    },
+    {
+      title: '点赞数',
+      dataIndex: 'thumbNum',
+      valueType: 'text',
+      renderText: (val) => `${val}次`,
+      hideInForm: true,
+      hideInSearch: true
+    },
+    {
+      title: '收藏数',
+      dataIndex: 'favourNum',
+      valueType: 'text',
+      renderText: (val) => `${val}次`,
+      hideInForm: true,
+      hideInSearch: true
+    },
     {
       title: '创建者',
       // dataIndex: 'userId',
-      dataIndex: 'creater',
+      dataIndex: 'user',
       renderText: (val) => `${val.userName}` ,
       valueType: 'text',
       hideInForm: true,
-      hideInSearch: true
     },
     {
-      title: '修改者',
-      // dataIndex: 'userId',
-      dataIndex: 'updater',
-      renderText: (val) => `${val.userName}` ,
-      valueType: 'text',
-      hideInForm: true,
-      hideInSearch: true
-    },
-
-    {
-      title: '模板状态',
+      title: '文章状态',
       dataIndex: 'status',
       valueEnum: {
         0: {
@@ -333,12 +366,16 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
   // ------ start 组件定义 ------------
   return (
     <PageContainer>
-      <ProTable<API.TemplateVO, API.PageParams>
+      <ProTable<API.PostVO, API.PageParams>
         headerTitle={'数据信息'}
         actionRef={actionRef}
         rowKey="id"
         search={{
           labelWidth: 120,
+        }}
+        // 分页配置
+        pagination={{
+          pageSize: 10,
         }}
         toolBarRender={() => [
           <Button
@@ -355,14 +392,15 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
 
         // 根据request规则，重新编写请求和响应处理
         request={async (params, sort: Record<string, SortOrder>, filter: Record<string, React.ReactText[] | null>) => {
-          const res = await listTemplateVoByPageUsingPost({
+          const res = await listPostVoByPageUsingPost({
+            tags: params.tagList,
             ...params
           })
           if (res?.data) {
             return  {
               data: res?.data.records || [],
               success: true,
-              total: res.total,
+              total: res?.data.total,
             }
           }
         }}
@@ -379,7 +417,25 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
       {
         // 如果多选选择，则显示操作栏
         selectedRowsState?.length > 0 && (
-        <FooterToolbar>
+        <FooterToolbar
+          extra={
+            <div>
+              已选择{' '}
+              <a
+                style={{
+                  fontWeight: 600,
+                }}
+              >
+                {selectedRowsState.length}
+              </a>{' '}
+              项 &nbsp;&nbsp;
+              <span>
+                点赞数共 {selectedRowsState.reduce((pre, item) => pre + item.thumbNum!, 0)} 次
+                收藏数共 {selectedRowsState.reduce((pre, item) => pre + item.favourNum!, 0)} 次
+              </span>
+            </div>
+          }
+        >
           <Button
             onClick={async () => {
               // 批量操作
@@ -418,7 +474,7 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
         values={currentRow || {}}
       />
 
-      {/* 定义抽屉式弹窗：查看模板信息详情 */}
+      {/* 定义抽屉式弹窗：查看文章信息详情 */}
       <Drawer
         width={600}
         open={showDetail}
@@ -428,17 +484,17 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
         }}
         closable={false}
       >
-        {currentRow?.id && (
-          <ProDescriptions<API.TemplateVO>
+        {currentRow?.title && (
+          <ProDescriptions<API.PostVO>
             column={1}
-            title={currentRow?.templateName}
+            title={currentRow?.title}
             request={async () => ({
               data: currentRow || {},
             })}
             params={{
               id: currentRow?.id,
             }}
-            columns={columns as ProDescriptionsItemProps<API.TemplateVO>[]}
+            columns={columns as ProDescriptionsItemProps<API.PostVO>[]}
           />
         )}
       </Drawer>

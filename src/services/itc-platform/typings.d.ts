@@ -1,7 +1,19 @@
 declare namespace API {
+  type BaseResponseBiResponse_ = {
+    code?: number;
+    data?: BiResponse;
+    message?: string;
+  };
+
   type BaseResponseBoolean_ = {
     code?: number;
     data?: boolean;
+    message?: string;
+  };
+
+  type BaseResponseChart_ = {
+    code?: number;
+    data?: Chart;
     message?: string;
   };
 
@@ -17,6 +29,36 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseInterfaceInfo_ = {
+    code?: number;
+    data?: InterfaceInfo;
+    message?: string;
+  };
+
+  type BaseResponseListInterfaceInfoStatisticVO_ = {
+    code?: number;
+    data?: InterfaceInfoStatisticVO[];
+    message?: string;
+  };
+
+  type BaseResponseListInterfaceInfoVO_ = {
+    code?: number;
+    data?: InterfaceInfoVO[];
+    message?: string;
+  };
+
+  type BaseResponseListNotificationVO_ = {
+    code?: number;
+    data?: NotificationVO[];
+    message?: string;
+  };
+
+  type BaseResponseListUserInterfaceInfo_ = {
+    code?: number;
+    data?: UserInterfaceInfo[];
+    message?: string;
+  };
+
   type BaseResponseLoginUserVO_ = {
     code?: number;
     data?: LoginUserVO;
@@ -29,6 +71,24 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseNotificationVO_ = {
+    code?: number;
+    data?: NotificationVO;
+    message?: string;
+  };
+
+  type BaseResponseObject_ = {
+    code?: number;
+    data?: Record<string, any>;
+    message?: string;
+  };
+
+  type BaseResponsePageChart_ = {
+    code?: number;
+    data?: PageChart_;
+    message?: string;
+  };
+
   type BaseResponsePageDataInfo_ = {
     code?: number;
     data?: PageDataInfo_;
@@ -38,6 +98,24 @@ declare namespace API {
   type BaseResponsePageDataInfoVO_ = {
     code?: number;
     data?: PageDataInfoVO_;
+    message?: string;
+  };
+
+  type BaseResponsePageFetchPostVO_ = {
+    code?: number;
+    data?: PageFetchPostVO_;
+    message?: string;
+  };
+
+  type BaseResponsePageInterfaceInfo_ = {
+    code?: number;
+    data?: PageInterfaceInfo_;
+    message?: string;
+  };
+
+  type BaseResponsePageNotificationVO_ = {
+    code?: number;
+    data?: PageNotificationVO_;
     message?: string;
   };
 
@@ -71,6 +149,18 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageUserInterfaceInfo_ = {
+    code?: number;
+    data?: PageUserInterfaceInfo_;
+    message?: string;
+  };
+
+  type BaseResponsePageUserSignVO_ = {
+    code?: number;
+    data?: PageUserSignVO_;
+    message?: string;
+  };
+
   type BaseResponsePageUserVO_ = {
     code?: number;
     data?: PageUserVO_;
@@ -80,6 +170,12 @@ declare namespace API {
   type BaseResponsePostVO_ = {
     code?: number;
     data?: PostVO;
+    message?: string;
+  };
+
+  type BaseResponseSearchVO_ = {
+    code?: number;
+    data?: SearchVO;
     message?: string;
   };
 
@@ -101,6 +197,18 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseUserInterfaceInfo_ = {
+    code?: number;
+    data?: UserInterfaceInfo;
+    message?: string;
+  };
+
+  type BaseResponseUserSignVO_ = {
+    code?: number;
+    data?: UserSignVO;
+    message?: string;
+  };
+
   type BaseResponseUserVO_ = {
     code?: number;
     data?: UserVO;
@@ -109,6 +217,68 @@ declare namespace API {
 
   type BatchDeleteRequest = {
     idList?: number[];
+  };
+
+  type BiResponse = {
+    chartId?: number;
+    genChart?: string;
+    genResult?: string;
+  };
+
+  type Chart = {
+    chartData?: string;
+    chartType?: string;
+    createTime?: string;
+    execMessage?: string;
+    genChart?: string;
+    genResult?: string;
+    goal?: string;
+    id?: number;
+    isDelete?: number;
+    name?: string;
+    status?: string;
+    updateTime?: string;
+    userId?: number;
+  };
+
+  type ChartAddRequest = {
+    chartData?: string;
+    chartType?: string;
+    goal?: string;
+    name?: string;
+  };
+
+  type ChartEditRequest = {
+    chartData?: string;
+    chartType?: string;
+    goal?: string;
+    id?: number;
+    name?: string;
+  };
+
+  type ChartQueryRequest = {
+    chartType?: string;
+    current?: number;
+    goal?: string;
+    id?: number;
+    name?: string;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    userId?: number;
+  };
+
+  type ChartUpdateRequest = {
+    chartData?: string;
+    chartType?: string;
+    createTime?: string;
+    genChart?: string;
+    genResult?: string;
+    goal?: string;
+    id?: number;
+    isDelete?: number;
+    name?: string;
+    updateTime?: string;
   };
 
   type checkUsingGETParams = {
@@ -184,7 +354,82 @@ declare namespace API {
     id?: number;
   };
 
+  type FetchPostQueryRequest = {
+    content?: string;
+    current?: number;
+    favourUserId?: number;
+    id?: number;
+    notId?: number;
+    orTags?: string[];
+    pageSize?: number;
+    searchText?: string;
+    sortField?: string;
+    sortOrder?: string;
+    status?: number;
+    tags?: string[];
+    title?: string;
+    userId?: number;
+    userName?: string;
+  };
+
+  type FetchPostVO = {
+    category?: string;
+    commentNum?: number;
+    content?: string;
+    createTime?: string;
+    favourNum?: number;
+    id?: number;
+    status?: number;
+    tagList?: string[];
+    tags?: string;
+    thumbNum?: number;
+    title?: string;
+    updateTime?: string;
+    userId?: string;
+    userInfo?: string;
+    userName?: string;
+    viewNum?: number;
+  };
+
+  type genChartByAiAsyncMqUsingPOSTParams = {
+    chartType?: string;
+    goal?: string;
+    name?: string;
+  };
+
+  type genChartByAiAsyncUsingPOSTParams = {
+    chartType?: string;
+    goal?: string;
+    name?: string;
+  };
+
+  type genChartByAiSyncUsingPOSTParams = {
+    chartType?: string;
+    goal?: string;
+    name?: string;
+  };
+
+  type getChartVOByIdUsingGETParams = {
+    /** id */
+    id?: number;
+  };
+
   type getDataInfoVOByIdUsingGETParams = {
+    /** id */
+    id?: number;
+  };
+
+  type getInterfaceInfoVOByIdUsingGET1Params = {
+    /** id */
+    id?: number;
+  };
+
+  type getInterfaceInfoVOByIdUsingGETParams = {
+    /** id */
+    id?: number;
+  };
+
+  type getNotificationVOByIdUsingGETParams = {
     /** id */
     id?: number;
   };
@@ -204,24 +449,246 @@ declare namespace API {
     id?: number;
   };
 
+  type getUserInterfaceInfoByIdUsingGETParams = {
+    /** id */
+    id?: number;
+  };
+
+  type getUserSignVOByIdUsingGETParams = {
+    /** id */
+    id?: number;
+  };
+
   type getUserVOByIdUsingGETParams = {
     /** id */
     id?: number;
   };
 
+  type HandleInterfaceInfoStatusRequest = {
+    id?: number;
+    status?: number;
+  };
+
+  type IdRequest = {
+    id?: number;
+  };
+
+  type InterfaceInfo = {
+    avatar?: string;
+    createTime?: string;
+    description?: string;
+    id?: number;
+    isDelete?: number;
+    method?: string;
+    name?: string;
+    requestHeader?: string;
+    requestParams?: string;
+    requestSample?: string;
+    responseHeader?: string;
+    responseParams?: string;
+    sourceType?: string;
+    status?: number;
+    updateTime?: string;
+    url?: string;
+    userId?: number;
+  };
+
+  type InterfaceInfoAddRequest = {
+    description?: string;
+    method?: string;
+    name?: string;
+    requestHeader?: string;
+    requestParams?: string;
+    responseHeader?: string;
+    responseParams?: string;
+    url?: string;
+  };
+
+  type InterfaceInfoInvokeRequest = {
+    id?: number;
+    userRequestParams?: string;
+  };
+
+  type InterfaceInfoQueryRequest = {
+    createTime?: string;
+    current?: number;
+    description?: string;
+    id?: number;
+    isDelete?: number;
+    method?: string;
+    name?: string;
+    pageSize?: number;
+    requestHeader?: string;
+    requestParams?: string;
+    responseHeader?: string;
+    sortField?: string;
+    sortOrder?: string;
+    status?: number;
+    updateTime?: string;
+    url?: string;
+    userId?: number;
+  };
+
+  type InterfaceInfoStatisticQueryRequest = {
+    interfaceName?: string;
+    interfaceStatus?: string;
+    interfaceType?: string;
+    searchText?: string;
+    userName?: string;
+  };
+
+  type InterfaceInfoStatisticVO = {
+    callFailNum?: string;
+    callSuccessNum?: string;
+    callTotal?: string;
+    errStatusNum?: string;
+    interfaceInfoAvatar?: string;
+    interfaceInfoId?: string;
+    interfaceInfoName?: string;
+  };
+
+  type InterfaceInfoUpdateRequest = {
+    createTime?: string;
+    description?: string;
+    id?: number;
+    isDelete?: number;
+    method?: string;
+    name?: string;
+    requestHeader?: string;
+    requestParams?: string;
+    responseHeader?: string;
+    status?: number;
+    updateTime?: string;
+    url?: string;
+    userId?: number;
+  };
+
+  type InterfaceInfoVO = {
+    avatar?: string;
+    createTime?: string;
+    description?: string;
+    id?: number;
+    isDelete?: number;
+    method?: string;
+    name?: string;
+    requestHeader?: string;
+    requestParams?: string;
+    requestSample?: string;
+    responseHeader?: string;
+    responseParams?: string;
+    sourceType?: string;
+    status?: number;
+    totalNum?: number;
+    updateTime?: string;
+    url?: string;
+    userId?: number;
+  };
+
+  type listUserInterfaceInfoByPageUsingGETParams = {
+    current?: number;
+    id?: number;
+    interfaceInfoId?: number;
+    leftNum?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    status?: number;
+    totalNum?: number;
+    userId?: number;
+  };
+
+  type listUserInterfaceInfoUsingGETParams = {
+    current?: number;
+    id?: number;
+    interfaceInfoId?: number;
+    leftNum?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    status?: number;
+    totalNum?: number;
+    userId?: number;
+  };
+
   type LoginUserVO = {
+    address?: string;
     createTime?: string;
     id?: number;
     updateTime?: string;
     userAvatar?: string;
+    userDescr?: string;
     userName?: string;
     userProfile?: string;
     userRole?: string;
   };
 
+  type NotificationAddRequest = {
+    content?: string;
+    domain?: string;
+    endTime?: string;
+    startTime?: string;
+    status?: number;
+    title?: string;
+  };
+
+  type NotificationQueryRequest = {
+    content?: string;
+    current?: number;
+    domain?: string;
+    endTime?: string;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    startTime?: string;
+    status?: number;
+    title?: string;
+    userId?: string;
+  };
+
+  type NotificationStatusUpdateRequest = {
+    id?: number;
+    operType?: string;
+  };
+
+  type NotificationUpdateRequest = {
+    content?: string;
+    domain?: string;
+    endTime?: string;
+    id?: number;
+    startTime?: string;
+    status?: number;
+    title?: string;
+  };
+
+  type NotificationVO = {
+    content?: string;
+    createTime?: string;
+    domain?: string;
+    endTime?: string;
+    id?: number;
+    startTime?: string;
+    status?: number;
+    title?: string;
+    updateTime?: string;
+    userId?: string;
+  };
+
   type OrderItem = {
     asc?: boolean;
     column?: string;
+  };
+
+  type PageChart_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: Chart[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
   };
 
   type PageDataInfo_ = {
@@ -245,6 +712,45 @@ declare namespace API {
     orders?: OrderItem[];
     pages?: number;
     records?: DataInfoVO[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
+  type PageFetchPostVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: FetchPostVO[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
+  type PageInterfaceInfo_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: InterfaceInfo[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
+  type PageNotificationVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: NotificationVO[];
     searchCount?: boolean;
     size?: number;
     total?: number;
@@ -315,6 +821,32 @@ declare namespace API {
     total?: number;
   };
 
+  type PageUserInterfaceInfo_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: UserInterfaceInfo[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
+  type PageUserSignVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: UserSignVO[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
   type PageUserVO_ = {
     countId?: string;
     current?: number;
@@ -326,6 +858,11 @@ declare namespace API {
     searchCount?: boolean;
     size?: number;
     total?: number;
+  };
+
+  type Picture = {
+    title?: string;
+    url?: string;
   };
 
   type Post = {
@@ -417,6 +954,23 @@ declare namespace API {
     userId?: number;
   };
 
+  type SearchRequest = {
+    current?: number;
+    pageSize?: number;
+    searchText?: string;
+    searchType?: string;
+    sortField?: string;
+    sortOrder?: string;
+  };
+
+  type SearchVO = {
+    dataList?: Record<string, any>[];
+    pictureList?: Picture[];
+    postList?: PostVO[];
+    total?: number;
+    userList?: UserVO[];
+  };
+
   type Template = {
     createTime?: string;
     creater?: number;
@@ -474,6 +1028,7 @@ declare namespace API {
   };
 
   type User = {
+    address?: string;
     createTime?: string;
     id?: number;
     isDelete?: number;
@@ -482,6 +1037,7 @@ declare namespace API {
     updateTime?: string;
     userAccount?: string;
     userAvatar?: string;
+    userDescr?: string;
     userName?: string;
     userPassword?: string;
     userProfile?: string;
@@ -492,8 +1048,35 @@ declare namespace API {
   type UserAddRequest = {
     userAccount?: string;
     userAvatar?: string;
+    userDescr?: string;
     userName?: string;
     userRole?: string;
+  };
+
+  type UserInterfaceInfo = {
+    createTime?: string;
+    id?: number;
+    interfaceInfoId?: number;
+    isDelete?: number;
+    leftNum?: number;
+    status?: number;
+    totalNum?: number;
+    updateTime?: string;
+    userId?: number;
+  };
+
+  type UserInterfaceInfoAddRequest = {
+    interfaceInfoId?: number;
+    leftNum?: number;
+    totalNum?: number;
+    userId?: number;
+  };
+
+  type UserInterfaceInfoUpdateRequest = {
+    id?: number;
+    leftNum?: number;
+    status?: number;
+    totalNum?: number;
   };
 
   type userLoginByWxOpenUsingGETParams = {
@@ -528,6 +1111,25 @@ declare namespace API {
     userPassword?: string;
   };
 
+  type UserSignQueryRequest = {
+    current?: number;
+    pageSize?: number;
+    signChannel?: string;
+    sortField?: string;
+    sortOrder?: string;
+    title?: string;
+  };
+
+  type UserSignVO = {
+    id?: number;
+    score?: number;
+    signChannel?: string;
+    signInTime?: string;
+    title?: string;
+    uid?: number;
+    uname?: string;
+  };
+
   type UserStatusUpdateRequest = {
     id?: number;
     operType?: string;
@@ -536,21 +1138,31 @@ declare namespace API {
 
   type UserUpdateMyRequest = {
     userAvatar?: string;
+    userDescr?: string;
     userName?: string;
     userProfile?: string;
   };
 
   type UserUpdateRequest = {
     id?: number;
+    userAccount?: string;
     userAvatar?: string;
+    userDescr?: string;
     userName?: string;
     userProfile?: string;
     userRole?: string;
   };
 
   type UserVO = {
+    accessKey?: string;
+    address?: string;
     createTime?: string;
+    grade?: string;
     id?: number;
+    isDevelop?: number;
+    registerChannel?: string;
+    score?: number;
+    secretKey?: string;
     updateTime?: string;
     userAccount?: string;
     userAvatar?: string;

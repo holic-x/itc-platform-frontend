@@ -104,7 +104,8 @@ export const errorConfig: RequestConfig = {
       console.log('data', data);
       // 当响应的状态码不为0，抛出错误
       if (data.code !== 0) {
-        throw new Error(data.message);
+        // throw new Error(); // 抛出一个新的Error（使用系统默认参数）
+        throw new Error(data.message); // 设定Error对象的message
         // message.error('请联系管理员处理');
       }
       // 如果一切正常，返回原始的响应数据

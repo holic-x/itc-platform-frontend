@@ -1,6 +1,7 @@
 import {Footer} from '@/components';
 import {getFakeCaptcha} from '@/services/ant-design-pro/login';
-import {getLoginUserUsingGet, userLoginUsingPost} from '@/services/itc-platform/userController';
+import {getCurrentLoginUserUsingGet} from '@/services/itc-platform/accountController';
+import { loginUsingPost} from '@/services/itc-platform/accountController';
 import {
   AlipayCircleOutlined,
   LockOutlined,
@@ -57,6 +58,7 @@ const useStyles = createStyles(({token}) => {
     },
   };
 });
+
 const ActionIcons = () => {
   const {styles} = useStyles();
   return (
@@ -93,7 +95,7 @@ const Login: React.FC = () => {
    * 登陆成功后，获取用户登录信息
    */
   const fetchUserInfo = async () => {
-    const userInfo = await getLoginUserUsingGet();
+    const userInfo = await getCurrentLoginUserUsingGet();
     if (userInfo) {
       flushSync(() => {
         setInitialState((s) => ({
@@ -115,7 +117,8 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: API.UserLoginRequest) => {
     try {
       // 登录
-      const res = await userLoginUsingPost(values);
+      const res = await loginUsingPost(values);
+
       if (res.code === 0) {
         const defaultLoginSuccessMessage = '登录成功！';
         message.success(defaultLoginSuccessMessage);
@@ -162,8 +165,8 @@ const Login: React.FC = () => {
             maxWidth: '75vw',
           }}
           logo={<img alt="logo" src="/logo.svg"/>}
-          title="Noob Template"
-          subTitle={'一个基于Springboot+Ant Design Pro构建的前后端通用模板，可帮助开发者快速构建单体应用项目架构'}
+          title="ITC 智能百宝箱"
+          subTitle={'一个基于Springboot+Ant Design Pro构建的应用系统，里面有各种好玩的功能：聚合搜索、API接口调用、智能报表分析'}
           initialValues={{
             autoLogin: true,
           }}
