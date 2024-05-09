@@ -118,6 +118,13 @@ export default defineConfig({
       src: '/scripts/loading.js',
       async: true,
     },
+
+    // todo 引入自定义插件
+    // {
+    //   src: 'https://pic-bed-1305292171.cos.ap-shanghai.myqcloud.com/publish/index-D523rTEB.js',
+    //   async: true,
+    // },
+
   ],
   //================ pro 插件配置 =================
   presets: ['umi-presets-pro'],

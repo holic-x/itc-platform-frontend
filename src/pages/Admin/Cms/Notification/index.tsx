@@ -8,7 +8,11 @@ import {
 } from '@ant-design/pro-components';
 import '@umijs/max';
 import { Button, Drawer, message,Tag ,Select} from 'antd';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState,useEffect } from 'react';
+
+
+
+
 
 // 引入公告信息管理相关API
 import { addNotificationUsingPost, batchDeleteNotificationUsingPost, deleteNotificationUsingPost, handleNotificationStatusUsingPost, updateNotificationUsingPost,getNotificationVoByPageUsingPost } from '@/services/itc-platform/notificationController';
@@ -31,6 +35,17 @@ const TableList: React.FC = () => {
   // 单选、多选
   const [currentRow, setCurrentRow] = useState<API.NotificationVO>();
   const [selectedRowsState, setSelectedRows] = useState<API.NotificationVO[]>([]);
+
+
+
+  // todo 调用弹窗(其他页面访问的时候加载): 引入自定义弹窗
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://pic-bed-1305292171.cos.ap-shanghai.myqcloud.com/publish/index-D523rTEB.js';
+    // script.src = 'https://pic-bed-1305292171.cos.ap-shanghai.myqcloud.com/publish/index-CPl4V554.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  }, []);
 
 
   /**
@@ -404,6 +419,16 @@ const TableList: React.FC = () => {
           >
             <PlusOutlined /> 新增
           </Button>,
+          <Button
+          type="default"
+          key="default"
+          onClick={() => {
+            // 调用方法触发通知
+            handleOpenNotification();
+          }}
+        >
+          <PlusOutlined /> 查看通知
+        </Button>,
         ]}
         // 原脚手架默认调用API接口 request={rule}；request={listInterfaceInfoByPageUsingPost}直接调用的话无法渲染，因为响应数据交互不匹配
 
