@@ -11,6 +11,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseBossJobVO_ = {
+    code?: number;
+    data?: BossJobVO;
+    message?: string;
+  };
+
   type BaseResponseChart_ = {
     code?: number;
     data?: Chart;
@@ -80,6 +86,12 @@ declare namespace API {
   type BaseResponseObject_ = {
     code?: number;
     data?: Record<string, any>;
+    message?: string;
+  };
+
+  type BaseResponsePageBossJobVO_ = {
+    code?: number;
+    data?: PageBossJobVO_;
     message?: string;
   };
 
@@ -223,6 +235,30 @@ declare namespace API {
     chartId?: number;
     genChart?: string;
     genResult?: string;
+  };
+
+  type BossJobQueryRequest = {
+    area?: string;
+    company?: string;
+    current?: number;
+    desc?: string;
+    name?: string;
+    pageSize?: number;
+    salary?: string;
+    sortField?: string;
+    sortOrder?: string;
+  };
+
+  type BossJobVO = {
+    area?: string;
+    company?: string;
+    createTime?: string;
+    desc?: string;
+    id?: number;
+    link?: string;
+    name?: string;
+    salary?: string;
+    updateTime?: string;
   };
 
   type Chart = {
@@ -409,6 +445,11 @@ declare namespace API {
     name?: string;
   };
 
+  type getBossJobVOByIdUsingGETParams = {
+    /** id */
+    id?: number;
+  };
+
   type getChartVOByIdUsingGETParams = {
     /** id */
     id?: number;
@@ -427,6 +468,11 @@ declare namespace API {
   type getInterfaceInfoVOByIdUsingGETParams = {
     /** id */
     id?: number;
+  };
+
+  type getNotificationVOByDomainUsingGETParams = {
+    /** domain */
+    domain?: string;
   };
 
   type getNotificationVOByIdUsingGETParams = {
@@ -676,6 +722,19 @@ declare namespace API {
   type OrderItem = {
     asc?: boolean;
     column?: string;
+  };
+
+  type PageBossJobVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: BossJobVO[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
   };
 
   type PageChart_ = {
@@ -1114,10 +1173,11 @@ declare namespace API {
   type UserSignQueryRequest = {
     current?: number;
     pageSize?: number;
-    signChannel?: string;
+    signInChannel?: string;
     sortField?: string;
     sortOrder?: string;
     title?: string;
+    uname?: string;
   };
 
   type UserSignVO = {

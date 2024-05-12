@@ -38,7 +38,7 @@ export async function logoutUsingPost(options?: { [key: string]: any }) {
   });
 }
 
-/** userSingIn POST /api/account/userSingIn */
+/** userSignIn POST /api/account/userSignIn */
 export async function userSignInUsingPost(options?: { [key: string]: any }) {
   return request<API.BaseResponseLong_>('/api/account/userSignIn', {
     method: 'POST',

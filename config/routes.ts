@@ -75,6 +75,7 @@ export default [
           // 当前路径配置转发规则
           {path: '/admin/search', redirect: '/admin/search/fetchPost'},
           {path: '/admin/search/fetchPost', name: '抓取文章信息管理', component: './Admin/Search/FetchPost'},
+          {path: '/admin/search/bossJob', name: 'Boss岗位信息管理', component: './Admin/Search/BossJob'},
         ],
       },
 

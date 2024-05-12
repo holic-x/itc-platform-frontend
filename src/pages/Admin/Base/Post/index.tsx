@@ -221,6 +221,12 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
       title: '文章标题',
       dataIndex: 'title',
       valueType: 'text',
+      render: (dom, entity) => {
+        if (entity.content.length > 10) {
+          return <div title={entity.content}>{entity.content.slice(0, 10) + '...'}</div>;
+        }
+        return dom;
+      },
       formItemProps:{
         rules:[{
           required:true, // 设置必填项
@@ -231,6 +237,12 @@ const handleBatchRemove = async (selectedRows: API.BatchDeleteRequest) => {
     {
       title: '文章内容',
       dataIndex: 'content',
+      render: (dom, entity) => {
+        if (entity.content.length > 10) {
+          return <div title={entity.content}>{entity.content.slice(0, 10) + '...'}</div>;
+        }
+        return dom;
+      },
       valueType: 'text',
       formItemProps:{
         rules:[{

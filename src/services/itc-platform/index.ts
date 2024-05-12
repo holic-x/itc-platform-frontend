@@ -5,6 +5,7 @@
 import * as accountController from './accountController';
 import * as analysicController from './analysicController';
 import * as apiSquareController from './apiSquareController';
+import * as bossJobController from './bossJobController';
 import * as chartController from './chartController';
 import * as dataInfoController from './dataInfoController';
 import * as fetchPostController from './fetchPostController';
@@ -25,6 +26,7 @@ import * as wxMpController from './wxMpController';
 export default {
   wxMpController,
   accountController,
+  bossJobController,
   notificationController,
   dataInfoController,
   fetchPostController,
