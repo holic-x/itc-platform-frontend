@@ -1,7 +1,7 @@
 
 import { useModel } from '@umijs/max';
 import React, { useEffect,useState } from 'react';
-import {getLoginUserUsingGet} from "@/services/itc-platform/userController";
+import {getUserVoMoreByCurrentLoginUserUsingGet} from "@/services/itc-platform/accountController";
 
 
 const Index: React.FC = () => {
@@ -9,7 +9,7 @@ const Index: React.FC = () => {
   const { setInitialState } = useModel('@@initialState');
 
   useEffect(()=>{
-    getLoginUserUsingGet({}).then(res=>{
+    getUserVoMoreByCurrentLoginUserUsingGet({}).then(res=>{
       console.error('res',res)
     })
   });

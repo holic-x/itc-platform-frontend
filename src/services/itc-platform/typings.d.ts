@@ -231,6 +231,13 @@ declare namespace API {
     idList?: number[];
   };
 
+  type bindEmailUsingGETParams = {
+    /** code */
+    code: string;
+    /** email */
+    email: string;
+  };
+
   type BiResponse = {
     chartId?: number;
     genChart?: string;
@@ -253,7 +260,7 @@ declare namespace API {
     area?: string;
     company?: string;
     createTime?: string;
-    desc?: string;
+    descr?: string;
     id?: number;
     link?: string;
     name?: string;
@@ -663,6 +670,7 @@ declare namespace API {
     updateTime?: string;
     userAvatar?: string;
     userDescr?: string;
+    userEmail?: string;
     userName?: string;
     userProfile?: string;
     userRole?: string;
@@ -1030,6 +1038,11 @@ declare namespace API {
     userList?: UserVO[];
   };
 
+  type sendEmailCodeUsingGETParams = {
+    /** email */
+    email: string;
+  };
+
   type Template = {
     createTime?: string;
     creater?: number;
@@ -1097,6 +1110,7 @@ declare namespace API {
     userAccount?: string;
     userAvatar?: string;
     userDescr?: string;
+    userEmail?: string;
     userName?: string;
     userPassword?: string;
     userProfile?: string;
@@ -1226,6 +1240,7 @@ declare namespace API {
     updateTime?: string;
     userAccount?: string;
     userAvatar?: string;
+    userEmail?: string;
     userName?: string;
     userProfile?: string;
     userRole?: string;

@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {PageContainer, GridContent} from '@ant-design/pro-components';
+import React, { useEffect, useState } from 'react';
+import { PageContainer, GridContent } from '@ant-design/pro-components';
 import {
   ClusterOutlined,
   ContactsOutlined,
@@ -7,17 +7,21 @@ import {
   PlusOutlined,
   CopyOutlined,
   ApiOutlined,
-  PayCircleOutlined
+  PayCircleOutlined,
+  LoadingOutlined
 } from '@ant-design/icons';
 
 
-import {Avatar, Card, Col, Divider, Input, InputRef, Row, Tag, message,Button, Spin} from 'antd';
-import {useModel} from "@@/exports";
+import { Avatar, Card, Col, Divider, Input, InputRef, Row, Tag, message, Button, Spin, Upload } from 'antd';
+
+import type { GetProp, UploadProps } from 'antd';
+
+import { useModel } from "@@/exports";
 
 
 // 引入自定义样式
 import useStyles from './Center.style';
-import {getUserVoMoreByCurrentLoginUserUsingGet, userSignInUsingPost} from "@/services/itc-platform/accountController";
+import { getUserVoMoreByCurrentLoginUserUsingGet, userSignInUsingPost,uploadAvatarUsingPost} from "@/services/itc-platform/accountController";
 
 // 引入自定义组件（复制按钮）
 import CopyButton from "@/components/Common/CopyButton";
@@ -26,15 +30,14 @@ import DownloadButton from "@/components/Common/DownloadButton";
 const Index: React.FC = () => {
 
   // 定义自定义样式
-  const {styles} = useStyles();
+  const { styles } = useStyles();
 
   // 获取登录用户信息
-  const {initialState} = useModel('@@initialState');
-  const {currentUser} = initialState || {};
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
 
   // 用户详细信息
   const [userMoreInfo, setUserMoreInfo] = useState();
-
 
   // 定义方法获取用户信息
   const fetchUserInfo = async () => {
@@ -49,7 +52,6 @@ const Index: React.FC = () => {
     // 调用方法触发用户信息获取
     fetchUserInfo();
   }, [])
-
 
   // ---------------- start 操作方法定义 --------------
   // 重新生成AK/SK
@@ -77,8 +79,81 @@ const Index: React.FC = () => {
   // ---------------- end 操作方法定义 --------------
 
 
+  // -------------------- start 头像处理相关 --------------------
+
+  type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
+  const getBase64 = (img: FileType, callback: (url: string) => void) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result as string));
+    reader.readAsDataURL(img);
+  };
+
+  const beforeUpload = (file: FileType) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('只能上传JPG/PNG类型文件');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('上传文件大小不能超过2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  };
+
+  const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string>();
+
+  // 自定义上传方法
+  const uploadImage = async(options:any )=>{
+
+    // const { file } = options; 
+    const file = options.file as File
+
+    const formData = new FormData();
+
+    formData.append('upfile', file); // 要上传的文件信息
+
+    console.log('formData',formData);
+
+    // 调用方法请求后台接口
+    try {
+      await uploadAvtarUsingGet().then(res => {
+        alert('头像更新成功');
+      });
+    } catch (error: any) {
+      message.error('头像更新失败' + error.message);
+      return false;
+    }
+  }
+
+  const handleChange: UploadProps['onChange'] = (info) => {
+    if (info.file.status === 'uploading') {
+      setLoading(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj as FileType, (url) => {
+        setLoading(false);
+        setImageUrl(url);
+      });
+    }
+  };
+
+  const uploadButton = (
+    <button style={{ border: 0, background: 'none' }} type="button">
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </button>
+  );
+
+
+  // -------------------- end 头像处理相关 --------------------
+
+
   // 自定义loading组件
-  const loading = (
+  const myloading = (
     <span className={styles.action}>
       <Spin
         size="small"
@@ -93,12 +168,12 @@ const Index: React.FC = () => {
   // 如果请求还没加载完成，则等待（否则待组件加载完成数据还没请求完，就会提示渲染报错）
   if (!userMoreInfo) {
     // return <div>Loading...</div>;
-    return loading;
+    return myloading;
 
   }
 
   //  渲染用户信息（展示用户详情）
-  const renderUserInfo = ({userName, userRole, address}: Partial<API.CurrentUser>) => {
+  const renderUserInfo = ({ userName, userRole, address, userEmail }: Partial<API.CurrentUser>) => {
     return (
       <div className={styles.detail}>
         <p>
@@ -125,12 +200,23 @@ const Index: React.FC = () => {
           />
           所在区域：{address}
         </p>
+        <p>
+          <HomeOutlined
+            style={{
+              marginRight: 8,
+            }}
+          />
+          个人邮箱：{userEmail}
+          <Button onClick={() => {
+            window.open("https://baidu.com", "_blank")
+          }} type="dashed">换绑邮箱</Button>
+        </p>
       </div>
     );
   };
 
   //  渲染开发者区域信息（API接口调用信息）
-  const renderDevelop = ({accessKey, secretKey, score}: Partial<API.UserVO>) => {
+  const renderDevelop = ({ accessKey, secretKey, score }: Partial<API.UserVO>) => {
     return (
       <div className={styles.detail}>
         <Button type="link" onClick={handleRegenerate}>💊重新生成AK/SK💊</Button>
@@ -143,7 +229,7 @@ const Index: React.FC = () => {
           />
           AccessKey：{accessKey}
           {/*引用自定义组件（复制按钮）完成复制操作*/}
-          <CopyButton text={accessKey}/>
+          <CopyButton text={accessKey} />
         </p>
         <p>
           <ApiOutlined
@@ -152,7 +238,7 @@ const Index: React.FC = () => {
             }}
           />
           SecretKey：{secretKey}
-          <CopyButton text={secretKey}/>
+          <CopyButton text={secretKey} />
         </p>
         <p>
           <PayCircleOutlined
@@ -178,7 +264,7 @@ const Index: React.FC = () => {
             }}
           />
           API接口调用平台：SDK下载 =》
-          <DownloadButton downloadUrl='xxx'/>
+          <DownloadButton downloadUrl='xxx' />
           <Button onClick={() => {
             window.open("https://baidu.com", "_blank")
           }} type="dashed">查看开发者文档</Button>
@@ -191,15 +277,15 @@ const Index: React.FC = () => {
             }}
           />
           BI智能图表分析：SDK下载 =》
-          <DownloadButton downloadUrl='xxx'/>
+          <DownloadButton downloadUrl='xxx' />
           <Button onClick={() => {
             window.open("https://baidu.com", "_blank")
           }} type="dashed">查看开发者文档</Button>
         </p>
 
         <p>
-          <DownloadButton downloadUrl=''/>
-          <DownloadButton downloadUrl='xxx'/>
+          <DownloadButton downloadUrl='' />
+          <DownloadButton downloadUrl='xxx' />
         </p>
       </div>
     );
@@ -219,8 +305,25 @@ const Index: React.FC = () => {
               {currentUser && (
                 <div>
                   <div className={styles.avatarHolder}>
-                    {/*<img alt="" src={currentUser.userAvatar} />*/}
-                    <img alt="" src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"/>
+                    {/* <img alt="" src={currentUser.userAvatar} /> */}
+                    <img alt="" src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" />
+
+
+                    <Upload
+                      name="avatar"
+                      listType="picture-circle"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      // 设定头像上传地址
+                      action="http://localhost:8101/api/account/uploadAvatar"// 通过这种方式上传 无法带上cookies（导致文件上传受到拦截）
+                      // customRequest= {uploadImage}
+                      beforeUpload={beforeUpload}
+                      onChange={handleChange}
+                    >
+                      {currentUser.userAvatar ? <img src={currentUser.userAvatar} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                    </Upload>
+
+
                     <div className={styles.name}>{currentUser.userName}</div>
                     <div>{currentUser?.userDescr}</div>
                   </div>
@@ -229,7 +332,7 @@ const Index: React.FC = () => {
                   {renderUserInfo(currentUser)}
 
                   {/*分割线*/}
-                  <Divider dashed/>
+                  <Divider dashed />
 
                   {/*渲染用户信息展示用户详情*/}
                   <div className={styles.avatarHolder}>

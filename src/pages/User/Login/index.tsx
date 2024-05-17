@@ -1,7 +1,6 @@
 import {Footer} from '@/components';
 import {getFakeCaptcha} from '@/services/ant-design-pro/login';
-import {getCurrentLoginUserUsingGet} from '@/services/itc-platform/accountController';
-import { loginUsingPost} from '@/services/itc-platform/accountController';
+import { loginUsingPost,getCurrentLoginUserUsingGet} from '@/services/itc-platform/accountController';
 import {
   AlipayCircleOutlined,
   LockOutlined,
